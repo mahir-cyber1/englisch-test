@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="de">
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>Deutsch → Englisch Wörter-Quiz</title>
+ <style>
+   :root { font-family: system-ui, -apple-system, Segoe UI, Arial, sans-serif; }
+   body { margin:0; background:#0f0f12; color:#fff; min-height:100vh; }
+   .wrap { width:100%; max-width:920px; margin:0 auto; padding:18px; display:flex; flex-direction:column; gap:14px; min-height:100vh; }
+
+   .topbar { display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+   .pill { background:#1b1b22; padding:10px 12px; border-radius:14px; border:1px solid #242433; }
+   .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+   .hearts { letter-spacing:2px; font-size:22px; color:#ff2b2b; }
+
+   .card { background:#15151c; border:1px solid #242433; border-radius:18px; padding:16px; }
+   .word { font-size:40px; font-weight:900; margin:0 0 10px 0; }
+   .muted { opacity:.85; }
+   .small { font-size:13px; opacity:.8; }
+
+   input[type="text"], textarea{
+     width:100%; box-sizing:border-box;
+     padding:14px 12px; border-radius:14px; border:1px solid #2a2a3a;
+     background:#0f0f12; color:#fff; font-size:18px;
+     outline:none;
+   }
+   textarea { resize:vertical; min-height:140px; }
+
+   .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+   button{
+     border:0; border-radius:14px; padding:12px 14px; font-size:15px; cursor:pointer;
+     background:#2b2b3a; color:#fff;
+   }
+   button.primary { background:#3b62ff; }
+   button.danger { background:#b53a3a; }
+   button:disabled { opacity:.5; cursor:not-allowed; }
+
+   .footer { margin-top:auto; padding:10px 0 4px; opacity:.65; font-size:13px; text-align:center; }
+
+   /* Flash feedback */
+   body.flashWrong { background:#7a0b0b !important; }
+   body.flashRight { background:#0b5a1f !important; }
+
+   /* Solution line */
+   .solution { margin-top:10px; font-weight:900; display:none; }
+
+   /* Multiple choice */
+   .choices { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+   .choiceBtn {
+     text-align:left; font-size:18px;
+     padding:14px 14px; border-radius:16px;
+     border:1px solid #2a2a3a; background:#0f0f12;
+   }
+
+   /* Mode buttons */
+   .modeBtn { padding:10px 12px; border-radius:14px; border:1px solid #242433; background:#1b1b22; }
+   .modeBtn.active { background:#3b62ff; border-color:#3b62ff; }
+
+   /* Blue overlay before wrong-words round */
+   .blueOverlay {
+     position:fixed; inset:0; display:none; z-index:1000;
+     background:#1565ff; align-items:center; justify-content:center; padding:20px;
+   }
+   .blueOverlay.show { display:flex; }
+   .blueBox { width:min(820px, 100%); text-align:center; color:#fff; }
+   .big { font-size:26px; font-weight:900; margin:0 0 10px 0; }
+
+   /* Final overlay */
+   .centerOverlay {
+     display:none; position:fixed; inset:0; z-index:1000;
+     background:rgba(0,0,0,.55);
+     align-items:center; justify-content:center; padding:20px;
+   }
+   .centerOverlay.show { display:flex; }
+   .box{
+     width:min(820px, 100%);
+     background:#0f0f12; border:1px solid #2a2a3a;
+     border-radius:22px; padding:20px;
+   }
+
+   /* Top-right button */
+   .topRightBtn {
+     display:inline-flex; align-items:center; gap:8px;
+     padding:10px 12px; border-radius:14px;
+     background:#1b1b22; border:1px solid #242433;
+     white-space:nowrap;
+   }
+   .topRightBtn b { font-weight:800; }
+
+   /* Bottom sheet */
+   .overlay { position:fixed; inset:0; display:none; z-index:999; }
+   .overlay.show { display:block; }
+
+   .sheetBackdrop{
+     position:fixed; inset:0;
+     background:rgba(0,0,0,.55);
+     opacity:0; transition:opacity .18s ease;
+   }
+   .sheetBackdrop.show{ opacity:1; }
+
+   .sheet{
+     position:fixed; left:0; right:0; bottom:0;
+     transform: translateY(105%);
+     transition: transform .22s ease;
+     padding: 10px 12px 14px;
+   }
+   .sheet.show{ transform: translateY(0); }
+
+   .sheetInner{
+     width:min(920px, 100%);
+     margin:0 auto;
+     background:#0f0f12;
+     border:1px solid #2a2a3a;
+     border-radius:22px 22px 18px 18px;
+     box-shadow: 0 -10px 30px rgba(0,0,0,.35);
+     overflow:hidden;
+   }
+   .sheetHeader{
+     display:flex; align-items:center; justify-content:space-between;
+     padding:12px 14px; border-bottom:1px solid #242433;
+     background:#12121a; position:relative;
+   }
+   .grabber{
+     position:absolute; left:50%; transform:translateX(-50%);
+     top:8px; width:46px; height:5px; border-radius:999px;
+     background:rgba(255,255,255,.18);
+   }
+   .sheetTitle{ font-weight:900; font-size:16px; }
+   .sheetBody{ padding:14px; max-height:72vh; overflow:auto; }
+
+   table { width:100%; border-collapse:collapse; margin-top:10px; }
+   th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #2a2a3a; }
+   th { opacity:.85; }
+ </style>
+</head>
+
+<body>
+ <div class="wrap">
+   <div class="topbar">
+     <div class="pill row">
+       <div class="hearts" id="hearts">♥♥♥♥♥</div>
+       <div class="pill" style="background:#11111a;">Richtig: <b id="correct">0</b></div>
+       <div class="pill" style="background:#11111a;">Tipps: <b id="hints">0</b></div>
+       <div class="pill" style="background:#11111a;">Wörter: <b id="wordCount">0</b></div>
+     </div>
+
+     <div class="row" style="align-items:flex-start;">
+       <div class="pill">Frage: <b id="progress">1</b>/<span id="total">0</span></div>
+
+       <div class="row">
+         <button class="modeBtn active" id="modeTypeBtn" type="button">Tippen</button>
+         <button class="modeBtn" id="modeMcBtn" type="button">Multiple Choice</button>
+       </div>
+
+       <button class="topRightBtn" id="openSheetBtn" type="button" title="Wörter verwalten">
+         <span>➕</span> <b>Neue Wörter</b>
+       </button>
+     </div>
+   </div>
+
+   <div class="card">
+     <p class="word" id="questionWord">...</p>
+
+     <!-- Typing mode -->
+     <div id="typingArea">
+       <input id="answer" type="text"
+         placeholder="Englisch eingeben..."
+         autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
+       />
+       <div class="btns">
+         <button class="primary" id="checkBtn" type="button">Prüfen</button>
+         <button id="hintBtn" type="button">Tipp (2 Buchstaben)</button>
+       </div>
+     </div>
+
+     <!-- MC mode -->
+     <div id="mcArea" style="display:none;">
+       <div class="choices" id="choices"></div>
+     </div>
+
+     <p class="muted" id="msg" style="margin:12px 0 0 0;"></p>
+     <p class="solution" id="solutionLine"></p>
+     <p class="small" style="margin:10px 0 0 0;">Tipp-Regel: pro <b>10 richtige</b> bekommst du <b>1 Tipp</b>.</p>
+   </div>
+
+   <div class="footer">dieser Seite wurde durch Mahir erstellt</div>
+ </div>
+
+ <!-- Blue screen -->
+ <div class="blueOverlay" id="blueOverlay">
+   <div class="blueBox">
+     <p class="big">Jetzt kommen die Wörter, die du falsch hattest</p>
+     <p class="muted" id="wrongCountText"></p>
+   </div>
+ </div>
+
+ <!-- Final overlay -->
+ <div class="centerOverlay" id="finalOverlay">
+   <div class="box" style="text-align:center;">
+     <p class="big" id="finalTitle">Fertig</p>
+     <p class="muted" id="finalText"></p>
+     <div class="btns" style="justify-content:center;">
+       <button id="exitBtn" type="button">App verlassen</button>
+       <button class="primary" id="continueBtn" type="button">Weitermachen</button>
+       <button id="repeatBtn" type="button">Wiederholen</button>
+     </div>
+   </div>
+ </div>
+
+ <!-- Bottom Sheet -->
+ <div class="overlay" id="sheetOverlay" aria-hidden="true">
+   <div class="sheetBackdrop" id="sheetBackdrop"></div>
+
+   <div class="sheet" id="sheet">
+     <div class="sheetInner">
+       <div class="sheetHeader">
+         <div class="grabber"></div>
+         <div>
+           <div class="sheetTitle">Wörterverwaltung</div>
+           <div class="small">Format: <b>Deutsch = Englisch</b> (eine Zeile pro Paar)</div>
+         </div>
+         <button id="closeSheetBtn" type="button">Schließen</button>
+       </div>
+
+       <div class="sheetBody">
+         <label class="small">Neue Wörter</label>
+         <textarea id="newWordsList" placeholder="Apfel = apple
+Haus = house
+Wasser = water"></textarea>
+
+         <div class="btns">
+           <button class="primary" id="addWordsBtn" type="button">Wörter speichern</button>
+           <button id="refreshBtn" type="button">Liste aktualisieren</button>
+           <button class="danger" id="resetBtn" type="button">Auf Standard zurücksetzen</button>
+         </div>
+
+         <p id="panelMsg" class="muted" style="margin:10px 0 0 0;"></p>
+         <div id="wordListWrap" style="margin-top:12px;"></div>
+       </div>
+     </div>
+   </div>
+ </div>
+
+<script>
+(function () {
+ "use strict";
+
+ // ========= Storage / Defaults =========
+ var STORAGE_KEY_WORDS = "words_all_safari_ok_v1";
+ var MAX_LIVES = 5;
+ var CORRECT_FOR_HINT = 10;
+
+ var DEFAULT_WORDS = [
+   { prompt: "Hund", answer: "dog" },
+   { prompt: "Katze", answer: "cat" },
+   { prompt: "Haus", answer: "house" },
+   { prompt: "Wasser", answer: "water" },
+   { prompt: "Brot", answer: "bread" },
+   { prompt: "Buch", answer: "book" },
+   { prompt: "Auto", answer: "car" },
+   { prompt: "Schule", answer: "school" },
+   { prompt: "Freund", answer: "friend" },
+   { prompt: "Stadt", answer: "city" },
+   { prompt: "Baum", answer: "tree" },
+   { prompt: "Sonne", answer: "sun" }
+ ];
+
+ function normalize(s) { return String(s || "").trim().toLowerCase(); }
+ function safeParse(json, fallback) { try { return JSON.parse(json); } catch(e) { return fallback; } }
+ function escapeHtml(str) {
+   return String(str || "")
+     .replace(/&/g,"&amp;")
+     .replace(/</g,"&lt;")
+     .replace(/>/g,"&gt;")
+     .replace(/"/g,"&quot;")
+     .replace(/'/g,"&#039;");
+ }
+
+ function seedIfEmpty() {
+   var stored = localStorage.getItem(STORAGE_KEY_WORDS);
+   if (!stored) {
+     localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(DEFAULT_WORDS));
+     return;
+   }
+   var parsed = safeParse(stored, null);
+   if (!Array.isArray(parsed)) {
+     localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(DEFAULT_WORDS));
+   }
+ }
+
+ function loadWords() {
+   seedIfEmpty();
+   var words = safeParse(localStorage.getItem(STORAGE_KEY_WORDS) || "[]", []);
+   var cleaned = [];
+   for (var i=0;i<words.length;i++){
+     var w = words[i];
+     if (!w || typeof w.prompt !== "string" || typeof w.answer !== "string") continue;
+     var de = w.prompt.trim();
+     var en = normalize(w.answer);
+     if (!de || !en) continue;
+     cleaned.push({ prompt: de, answer: en });
+   }
+   return cleaned;
+ }
+
+ function saveWords(words) {
+   localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(words));
+ }
+
+ function shuffle(arr) {
+   for (var i = arr.length - 1; i > 0; i--) {
+     var j = Math.floor(Math.random() * (i + 1));
+     var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+   }
+   return arr;
+ }
+
+ // ========= UI refs =========
+ var heartsEl = document.getElementById("hearts");
+ var correctEl = document.getElementById("correct");
+ var hintsEl = document.getElementById("hints");
+ var wordCountEl = document.getElementById("wordCount");
+ var progressEl = document.getElementById("progress");
+ var totalEl = document.getElementById("total");
+
+ var questionWordEl = document.getElementById("questionWord");
+ var msgEl = document.getElementById("msg");
+ var solutionEl = document.getElementById("solutionLine");
+
+ var typingArea = document.getElementById("typingArea");
+ var mcArea = document.getElementById("mcArea");
+ var answerEl = document.getElementById("answer");
+ var checkBtn = document.getElementById("checkBtn");
+ var hintBtn = document.getElementById("hintBtn");
+ var choicesEl = document.getElementById("choices");
+
+ var modeTypeBtn = document.getElementById("modeTypeBtn");
+ var modeMcBtn = document.getElementById("modeMcBtn");
+
+ var blueOverlay = document.getElementById("blueOverlay");
+ var wrongCountText = document.getElementById("wrongCountText");
+
+ var finalOverlay = document.getElementById("finalOverlay");
+ var finalTitle = document.getElementById("finalTitle");
+ var finalText = document.getElementById("finalText");
+ var exitBtn = document.getElementById("exitBtn");
+ var continueBtn = document.getElementById("continueBtn");
+ var repeatBtn = document.getElementById("repeatBtn");
+
+ // sheet
+ var openSheetBtn = document.getElementById("openSheetBtn");
+ var sheetOverlay = document.getElementById("sheetOverlay");
+ var sheetBackdrop = document.getElementById("sheetBackdrop");
+ var sheet = document.getElementById("sheet");
+ var closeSheetBtn = document.getElementById("closeSheetBtn");
+ var newWordsList = document.getElementById("newWordsList");
+ var addWordsBtn = document.getElementById("addWordsBtn");
+ var refreshBtn = document.getElementById("refreshBtn");
+ var resetBtn = document.getElementById("resetBtn");
+ var panelMsg = document.getElementById("panelMsg");
+ var wordListWrap = document.getElementById("wordListWrap");
+
+ // ========= Game state =========
+ var mode = "type"; // "type" | "mc"
+ var lives = MAX_LIVES;
+ var correctTotal = 0;
+ var correctSinceHint = 0;
+ var hintsAvailable = 0;
+
+ var pool = [];
+ var wrongPool = [];
+ var index = 0;
+ var locked = false;
+ var hintShown = false;
+
+ function setMessage(t){ msgEl.textContent = t || ""; }
+ function showSolutionLine(t){ solutionEl.textContent = t; solutionEl.style.display = "block"; }
+ function hideSolutionLine(){ solutionEl.textContent = ""; solutionEl.style.display = "none"; }
+ function setPanelMessage(t){ panelMsg.textContent = t || ""; }
+
+ function flash(cls) {
+   document.body.classList.add(cls);
+   setTimeout(function(){ document.body.classList.remove(cls); }, 250);
+ }
+
+ function updateTopUI(){
+   heartsEl.textContent = new Array(lives + 1).join("♥") + new Array((MAX_LIVES - lives) + 1).join("♡");
+   correctEl.textContent = String(correctTotal);
+   hintsEl.textContent = String(hintsAvailable);
+   wordCountEl.textContent = String(loadWords().length);
+
+   progressEl.textContent = String(Math.min(index + 1, pool.length || 0) || 0);
+   totalEl.textContent = String(pool.length);
+
+   hintBtn.disabled = locked || hintShown || hintsAvailable <= 0 || mode !== "type";
+ }
+
+ function currentItem(){ return pool[index]; }
+
+ function awardHintIfNeeded(){
+   while (correctSinceHint >= CORRECT_FOR_HINT) {
+     correctSinceHint -= CORRECT_FOR_HINT;
+     hintsAvailable += 1;
+   }
+ }
+
+ function markWrong(item){
+   if (!item) return;
+   for (var i=0;i<wrongPool.length;i++){
+     if (wrongPool[i].prompt === item.prompt && wrongPool[i].answer === item.answer) return;
+   }
+   wrongPool.push(item);
+ }
+
+ function startRoundFrom(words){
+   pool = shuffle(words.slice());
+   wrongPool = [];
+   index = 0;
+   renderQuestion();
+ }
+
+ function startGame(resetProgress){
+   lives = MAX_LIVES;
+   if (resetProgress) {
+     correctTotal = 0;
+     hintsAvailable = 0;
+     correctSinceHint = 0;
+   }
+   var words = loadWords();
+   startRoundFrom(words);
+ }
+
+ function endOfRound(){
+   if (wrongPool.length > 0) {
+     blueOverlay.classList.add("show");
+     wrongCountText.textContent = "Falsche Wörter: " + wrongPool.length;
+     setTimeout(function(){
+       blueOverlay.classList.remove("show");
+       startRoundFrom(wrongPool);
+     }, 3000);
+     return;
+   }
+   finalTitle.textContent = "Herzlichen Glückwunsch, du hast es bis zum Ende geschafft";
+   finalText.textContent = "Richtig insgesamt: " + correctTotal + ". Herzen übrig: " + lives + ".";
+   finalOverlay.classList.add("show");
+ }
+
+ function nextQuestion(){
+   index += 1;
+   if (index >= pool.length) endOfRound();
+   else renderQuestion();
+ }
+
+ function setMode(newMode){
+   mode = newMode;
+   modeTypeBtn.classList.toggle("active", mode === "type");
+   modeMcBtn.classList.toggle("active", mode === "mc");
+   typingArea.style.display = mode === "type" ? "block" : "none";
+   mcArea.style.display = mode === "mc" ? "block" : "none";
+
+   locked = false;
+   hintShown = false;
+   hideSolutionLine();
+   setMessage("");
+   renderQuestion();
+ }
+
+ function renderQuestion(){
+   locked = false;
+   hintShown = false;
+   hideSolutionLine();
+   setMessage("");
+
+   var item = currentItem();
+   questionWordEl.textContent = item ? item.prompt : "(keine Wörter)";
+   updateTopUI();
+
+   if (!item) return;
+
+   if (mode === "type") {
+     answerEl.value = "";
+     answerEl.focus();
+   } else {
+     renderChoices(item);
+   }
+ }
+
+ // ========= Typing mode =========
+ function checkTyping(){
+   if (locked) return;
+   var item = currentItem();
+   if (!item) return;
+
+   var user = normalize(answerEl.value);
+   if (!user) { setMessage("Du musst etwas eingeben."); return; }
+
+   locked = true;
+   updateTopUI();
+
+   var expected = normalize(item.answer);
+   if (user === expected) {
+     setMessage("✅ Richtig!");
+     correctTotal += 1;
+     correctSinceHint += 1;
+     awardHintIfNeeded();
+     flash("flashRight");
+     setTimeout(nextQuestion, 250);
+   } else {
+     setMessage("❌ Falsch.");
+     flash("flashWrong");
+     lives -= 1;
+     markWrong(item);
+
+     showSolutionLine("Richtig: " + item.prompt + " = " + item.answer);
+
+     if (lives <= 0) {
+       setTimeout(function(){
+         finalTitle.textContent = "Game Over";
+         finalText.textContent = "Du hast keine Herzen mehr.";
+         finalOverlay.classList.add("show");
+       }, 600);
+       return;
+     }
+
+     // 5 Sekunden Lösung anzeigen, dann automatisch weiter
+     setTimeout(function(){
+       hideSolutionLine();
+       nextQuestion();
+     }, 5000);
+   }
+ }
+
+ function useHint(){
+   if (locked || mode !== "type") return;
+   if (hintsAvailable <= 0 || hintShown) return;
+   var item = currentItem();
+   var first2 = (item && item.answer) ? item.answer.slice(0,2) : "";
+   setMessage('Tipp: beginnt mit "' + first2 + '"');
+   hintsAvailable -= 1;
+   hintShown = true;
+   updateTopUI();
+ }
+
+ // ========= Multiple choice =========
+ function renderChoices(item){
+   choicesEl.innerHTML = "";
+
+   var words = loadWords();
+   var correct = item.answer;
+   var poolAnswers = [];
+   for (var i=0;i<words.length;i++){
+     if (words[i].answer && words[i].answer !== correct) poolAnswers.push(words[i].answer);
+   }
+   // unique
+   var uniq = [];
+   var seen = {};
+   for (var j=0;j<poolAnswers.length;j++){
+     var a = poolAnswers[j];
+     if (!seen[a]) { seen[a] = true; uniq.push(a); }
+   }
+   shuffle(uniq);
+
+   var options = [correct];
+   if (uniq[0]) options.push(uniq[0]);
+   if (uniq[1]) options.push(uniq[1]);
+   while (options.length < 3) options.push(correct); // fallback if too few words
+
+   // ensure exactly 3
+   options = options.slice(0,3);
+   shuffle(options);
+
+   for (var k=0;k<options.length;k++){
+     (function(opt){
+       var b = document.createElement("button");
+       b.type = "button";
+       b.className = "choiceBtn";
+       b.textContent = opt;
+       b.addEventListener("click", function(){ chooseMc(opt); });
+       choicesEl.appendChild(b);
+     })(options[k]);
+   }
+ }
+
+ function setChoicesDisabled(dis){
+   var btns = choicesEl.querySelectorAll("button");
+   for (var i=0;i<btns.length;i++) btns[i].disabled = dis;
+ }
+
+ function chooseMc(selected){
+   if (locked) return;
+   var item = currentItem();
+   if (!item) return;
+
+   locked = true;
+   setChoicesDisabled(true);
+
+   var correct = item.answer;
+
+   if (normalize(selected) === normalize(correct)) {
+     setMessage("✅ Richtig!");
+     correctTotal += 1;
+     correctSinceHint += 1;
+     awardHintIfNeeded();
+     flash("flashRight");
+
+     setTimeout(function(){
+       setChoicesDisabled(false);
+       nextQuestion();
+     }, 2000);
+   } else {
+     setMessage("❌ Falsch.");
+     flash("flashWrong");
+     lives -= 1;
+     markWrong(item);
+
+     showSolutionLine("Richtig: " + item.prompt + " = " + item.answer);
+
+     if (lives <= 0) {
+       setTimeout(function(){
+         finalTitle.textContent = "Game Over";
+         finalText.textContent = "Du hast keine Herzen mehr.";
+         finalOverlay.classList.add("show");
+       }, 600);
+       return;
+     }
+
+     setTimeout(function(){
+       hideSolutionLine();
+       setChoicesDisabled(false);
+       nextQuestion();
+     }, 2000);
+   }
+
+   updateTopUI();
+ }
+
+ // ========= Sheet (Words management) =========
+ function openSheet(){
+   sheetOverlay.classList.add("show");
+   sheetBackdrop.classList.add("show");
+   sheet.classList.add("show");
+   sheetOverlay.setAttribute("aria-hidden", "false");
+   renderWordList();
+   setPanelMessage("");
+   setTimeout(function(){ newWordsList.focus(); }, 50);
+ }
+
+ function closeSheet(){
+   sheetBackdrop.classList.remove("show");
+   sheet.classList.remove("show");
+   sheetOverlay.setAttribute("aria-hidden", "true");
+   setTimeout(function(){ sheetOverlay.classList.remove("show"); }, 220);
+ }
+
+ function parseWordLines(text) {
+   var lines = String(text || "").split("\n");
+   var pairs = [];
+   for (var i=0;i<lines.length;i++){
+     var line = lines[i].trim();
+     if (!line) continue;
+     var parts = line.split("=");
+     if (parts.length !== 2) continue;
+     var de = parts[0].trim();
+     var en = normalize(parts[1]);
+     if (!de || !en) continue;
+     pairs.push({ prompt: de, answer: en });
+   }
+   return pairs;
+ }
+
+ function addWordsFromList(){
+   var pairs = parseWordLines(newWordsList.value);
+   if (pairs.length === 0) {
+     setPanelMessage("Keine gültigen Zeilen gefunden. Format: Deutsch = Englisch");
+     return;
+   }
+
+   var words = loadWords();
+   var added = 0, skipped = 0;
+
+   for (var i=0;i<pairs.length;i++){
+     var p = pairs[i];
+     var exists = false;
+     for (var j=0;j<words.length;j++){
+       if (normalize(words[j].prompt) === normalize(p.prompt) && normalize(words[j].answer) === normalize(p.answer)) {
+         exists = true; break;
+       }
+     }
+     if (exists) { skipped += 1; continue; }
+     words.push(p);
+     added += 1;
+   }
+
+   saveWords(words);
+   newWordsList.value = "";
+   setPanelMessage("Gespeichert: " + added + " | Übersprungen: " + skipped);
+
+   renderWordList();
+   // ✅ sofort Quiz mit neuen Wörtern starten
+   startGame(false);
+ }
+
+ function deleteWordByIndex(idx){
+   var words = loadWords();
+   if (idx < 0 || idx >= words.length) return;
+   words.splice(idx, 1);
+   saveWords(words);
+   setPanelMessage("Wort gelöscht.");
+   renderWordList();
+   startGame(false);
+ }
+
+ function resetToDefault(){
+   saveWords(DEFAULT_WORDS);
+   setPanelMessage("Zurückgesetzt auf Standard.");
+   renderWordList();
+   startGame(true);
+ }
+
+ function renderWordList(){
+   var words = loadWords();
+   if (words.length === 0) {
+     wordListWrap.innerHTML = '<div class="pill">Keine Wörter vorhanden.</div>';
+     return;
+   }
+
+   var rows = "";
+   for (var i=0;i<words.length;i++){
+     rows += '<tr>'
+       + '<td>' + escapeHtml(words[i].prompt) + '</td>'
+       + '<td>' + escapeHtml(words[i].answer) + '</td>'
+       + '<td><button class="danger" data-del="' + i + '" type="button">Löschen</button></td>'
+       + '</tr>';
+   }
+
+   wordListWrap.innerHTML =
+     '<div class="pill" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">'
+     + '<span>Wörter gesamt: <b>' + words.length + '</b></span>'
+     + '<span class="small">Änderungen gelten lokal (Browser).</span>'
+     + '</div>'
+     + '<table><thead><tr><th>Deutsch</th><th>Englisch</th><th>Aktion</th></tr></thead><tbody>'
+     + rows
+     + '</tbody></table>';
+
+   var btns = wordListWrap.querySelectorAll("button[data-del]");
+   for (var k=0;k<btns.length;k++){
+     (function(b){
+       b.addEventListener("click", function(){
+         var idx = parseInt(b.getAttribute("data-del"), 10);
+         deleteWordByIndex(idx);
+       });
+     })(btns[k]);
+   }
+
+   updateTopUI();
+ }
+
+ // ========= Events =========
+ modeTypeBtn.addEventListener("click", function(){ setMode("type"); });
+ modeMcBtn.addEventListener("click", function(){ setMode("mc"); });
+
+ checkBtn.addEventListener("click", checkTyping);
+ answerEl.addEventListener("keydown", function(e){ if (e.key === "Enter") checkTyping(); });
+ hintBtn.addEventListener("click", useHint);
+
+ openSheetBtn.addEventListener("click", openSheet);
+ closeSheetBtn.addEventListener("click", closeSheet);
+ sheetBackdrop.addEventListener("click", closeSheet);
+
+ addWordsBtn.addEventListener("click", addWordsFromList);
+ refreshBtn.addEventListener("click", renderWordList);
+ resetBtn.addEventListener("click", resetToDefault);
+
+ exitBtn.addEventListener("click", function(){
+   finalOverlay.classList.remove("show");
+   alert("Du kannst den Tab jetzt schließen.");
+ });
+ continueBtn.addEventListener("click", function(){
+   finalOverlay.classList.remove("show");
+   startGame(false);
+ });
+ repeatBtn.addEventListener("click", function(){
+   finalOverlay.classList.remove("show");
+   startGame(true);
+ });
+
+ // ========= Start =========
+ startGame(true);
+})();
+</script>
+</body>
+</html>
