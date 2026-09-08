@@ -1,794 +1,394 @@
 <!doctype html>
 <html lang="de">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>Deutsch → Englisch Wörter-Quiz</title>
- <style>
-   :root { font-family: system-ui, -apple-system, Segoe UI, Arial, sans-serif; }
-   body { margin:0; background:#0f0f12; color:#fff; min-height:100vh; }
-   .wrap { width:100%; max-width:920px; margin:0 auto; padding:18px; display:flex; flex-direction:column; gap:14px; min-height:100vh; }
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#3158d5"><meta name="description" content="Vokabeln in beide Richtungen üben – mit Tipps und Wiederholung.">
+<title>Mahirs Vokabel-Quiz</title>
+<style>
+*{box-sizing:border-box} :root{font-family:ui-rounded,"SF Pro Rounded",system-ui,sans-serif;color:#18264b;background:#edf3ff;font-size:16px}body{margin:0}button,input,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation;min-height:50px;border:0;border-radius:16px;padding:13px 19px;font-weight:750;color:inherit;background:#eaf0ff}button:hover{filter:brightness(.96)}button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #a65400;outline-offset:3px}[hidden]{display:none!important}.wrap{max-width:780px;margin:auto;padding:24px 20px 30px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.mark{background:#3158d5;color:white;font-weight:900;font-size:24px;border-radius:17px;padding:12px}h1{font-size:clamp(20px,4vw,28px);margin:0;letter-spacing:-.6px}header p{margin:2px 0 0;color:#52617f;font-size:14px}.admin-link{background:white;font-size:14px;padding:10px 14px;border:1px solid #d5dff4}.directions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}.directions button{border:2px solid transparent;background:white}.directions button[aria-pressed=true]{background:#3158d5;color:white;box-shadow:0 5px 0 #203f9d}.stats{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;margin:25px 0 10px}.stats span{background:white;padding:9px 12px;border-radius:12px}.stats .score{background:#d9f5e8;color:#145b40}progress{display:block;width:100%;height:10px;border:0;border-radius:10px;overflow:hidden;background:#dce4f6;margin-bottom:20px}progress::-webkit-progress-bar{background:#dce4f6}progress::-webkit-progress-value{background:#3158d5;border-radius:10px}progress::-moz-progress-bar{background:#3158d5}.card{background:white;border:1px solid #dbe3f4;border-radius:26px;padding:clamp(20px,5vw,36px);box-shadow:0 10px 30px #18306309}.eyebrow{color:#52617f;font-size:15px;font-weight:700;margin:0 0 10px}.word{font-size:clamp(32px,7vw,48px);letter-spacing:-1px;overflow-wrap:anywhere;margin:0 0 26px;line-height:1.2}label{display:block;font-weight:700;margin:0 0 9px}input,textarea{width:100%;border:2px solid #cfdaef;border-radius:16px;padding:15px;background:#f9fbff;color:#18264b;font-size:20px}textarea{min-height:145px;font-size:17px;resize:vertical}input:focus,textarea:focus{border-color:#3158d5}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.actions>*{flex:1}.primary{background:#3158d5;color:white;box-shadow:0 4px 0 #203f9d}.secondary{background:#eef2fb}.feedback{margin-top:18px;padding:16px;border-radius:16px;line-height:1.6;overflow-wrap:anywhere}.feedback.tip{background:#fff1c7;color:#684b00}.feedback.error{background:#ffe7e7;color:#882c34}.feedback.success{background:#dcf6e9;color:#19563d}.feedback strong{font-size:24px}.helper{font-size:14px;line-height:1.6;color:#52617f;margin:18px 2px}.rule{display:flex;gap:10px;align-items:flex-start;background:#e2eaff;border-radius:17px;padding:14px;margin-top:20px}.rule b{background:#3158d5;color:#fff;border-radius:50%;min-width:25px;text-align:center}.rule p{margin:0;font-size:14px;line-height:1.6}footer{text-align:center;font-size:14px;color:#52617f;margin:24px 0 0}h2{margin:0 0 14px;font-size:26px}.admin-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.admin-head h2{margin:0}.notice{background:#fff1c7;padding:14px;border-radius:14px;font-size:14px;line-height:1.6}.word-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #e5eaf4}.word-row .pair{flex:1;min-width:0;overflow-wrap:anywhere}.word-row .pair b,.word-row .pair span{display:block}.word-row .pair span{color:#52617f;margin-top:4px}.word-row small{font-size:14px;color:#52617f}.danger{color:#922b38;background:#ffe7e7}.center{text-align:center}.celebrate{font-size:56px;margin:0 0 10px}dialog{width:min(450px,calc(100% - 32px));border:0;border-radius:24px;padding:26px;color:#18264b}dialog::backdrop{background:#18264b88}.error-text{color:#922b38;line-height:1.5}.admin-status{line-height:1.6}.rule+.helper{margin-bottom:0}@media(max-width:430px){.wrap{padding:16px 14px 24px}.mark{display:none}header{margin-bottom:20px}.directions button{padding:12px 8px;font-size:15px}.card{border-radius:22px}.actions{flex-direction:column}.admin-head{align-items:flex-start}.admin-head button{font-size:14px;padding:10px} .word-row button{padding:10px;font-size:14px}}@media(prefers-reduced-motion:no-preference){button{transition:background .15s,filter .15s}}
 
-   .topbar { display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
-   .pill { background:#1b1b22; padding:10px 12px; border-radius:14px; border:1px solid #242433; }
-   .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
-   .hearts { letter-spacing:2px; font-size:22px; color:#ff2b2b; }
-
-   .card { background:#15151c; border:1px solid #242433; border-radius:18px; padding:16px; }
-   .word { font-size:40px; font-weight:900; margin:0 0 10px 0; }
-   .muted { opacity:.85; }
-   .small { font-size:13px; opacity:.8; }
-
-   input[type="text"], textarea{
-     width:100%; box-sizing:border-box;
-     padding:14px 12px; border-radius:14px; border:1px solid #2a2a3a;
-     background:#0f0f12; color:#fff; font-size:18px;
-     outline:none;
-   }
-   textarea { resize:vertical; min-height:140px; }
-
-   .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-   button{
-     border:0; border-radius:14px; padding:12px 14px; font-size:15px; cursor:pointer;
-     background:#2b2b3a; color:#fff;
-   }
-   button.primary { background:#3b62ff; }
-   button.danger { background:#b53a3a; }
-   button:disabled { opacity:.5; cursor:not-allowed; }
-
-   .footer { margin-top:auto; padding:10px 0 4px; opacity:.65; font-size:13px; text-align:center; }
-
-   /* Flash feedback */
-   body.flashWrong { background:#7a0b0b !important; }
-   body.flashRight { background:#0b5a1f !important; }
-
-   /* Solution line */
-   .solution { margin-top:10px; font-weight:900; display:none; }
-
-   /* Multiple choice */
-   .choices { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
-   .choiceBtn {
-     text-align:left; font-size:18px;
-     padding:14px 14px; border-radius:16px;
-     border:1px solid #2a2a3a; background:#0f0f12;
-   }
-
-   /* Mode buttons */
-   .modeBtn { padding:10px 12px; border-radius:14px; border:1px solid #242433; background:#1b1b22; }
-   .modeBtn.active { background:#3b62ff; border-color:#3b62ff; }
-
-   /* Blue overlay before wrong-words round */
-   .blueOverlay {
-     position:fixed; inset:0; display:none; z-index:1000;
-     background:#1565ff; align-items:center; justify-content:center; padding:20px;
-   }
-   .blueOverlay.show { display:flex; }
-   .blueBox { width:min(820px, 100%); text-align:center; color:#fff; }
-   .big { font-size:26px; font-weight:900; margin:0 0 10px 0; }
-
-   /* Final overlay */
-   .centerOverlay {
-     display:none; position:fixed; inset:0; z-index:1000;
-     background:rgba(0,0,0,.55);
-     align-items:center; justify-content:center; padding:20px;
-   }
-   .centerOverlay.show { display:flex; }
-   .box{
-     width:min(820px, 100%);
-     background:#0f0f12; border:1px solid #2a2a3a;
-     border-radius:22px; padding:20px;
-   }
-
-   /* Top-right button */
-   .topRightBtn {
-     display:inline-flex; align-items:center; gap:8px;
-     padding:10px 12px; border-radius:14px;
-     background:#1b1b22; border:1px solid #242433;
-     white-space:nowrap;
-   }
-   .topRightBtn b { font-weight:800; }
-
-   /* Bottom sheet */
-   .overlay { position:fixed; inset:0; display:none; z-index:999; }
-   .overlay.show { display:block; }
-
-   .sheetBackdrop{
-     position:fixed; inset:0;
-     background:rgba(0,0,0,.55);
-     opacity:0; transition:opacity .18s ease;
-   }
-   .sheetBackdrop.show{ opacity:1; }
-
-   .sheet{
-     position:fixed; left:0; right:0; bottom:0;
-     transform: translateY(105%);
-     transition: transform .22s ease;
-     padding: 10px 12px 14px;
-   }
-   .sheet.show{ transform: translateY(0); }
-
-   .sheetInner{
-     width:min(920px, 100%);
-     margin:0 auto;
-     background:#0f0f12;
-     border:1px solid #2a2a3a;
-     border-radius:22px 22px 18px 18px;
-     box-shadow: 0 -10px 30px rgba(0,0,0,.35);
-     overflow:hidden;
-   }
-   .sheetHeader{
-     display:flex; align-items:center; justify-content:space-between;
-     padding:12px 14px; border-bottom:1px solid #242433;
-     background:#12121a; position:relative;
-   }
-   .grabber{
-     position:absolute; left:50%; transform:translateX(-50%);
-     top:8px; width:46px; height:5px; border-radius:999px;
-     background:rgba(255,255,255,.18);
-   }
-   .sheetTitle{ font-weight:900; font-size:16px; }
-   .sheetBody{ padding:14px; max-height:72vh; overflow:auto; }
-
-   table { width:100%; border-collapse:collapse; margin-top:10px; }
-   th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #2a2a3a; }
-   th { opacity:.85; }
- </style>
+body{background:linear-gradient(145deg,#e6f3ff 0%,#f0e8ff 48%,#fff0da 100%);min-height:100vh}.mark{background:linear-gradient(135deg,#3158d5,#8c36bf)}.card{border-top:5px solid #7d48cc}.directions button:first-child[aria-pressed=true]{background:#3158d5}.directions button:last-child[aria-pressed=true]{background:#8750c6;box-shadow:0 5px 0 #5b2d91}.rewards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}.rewards>div{display:flex;align-items:center;gap:9px;background:#fff0b5;border:2px solid #f2d467;border-radius:19px;padding:14px;flex-wrap:wrap}.rewards>div:nth-child(2){background:#ffe1e9;border-color:#f3a8be}.rewards strong{font-size:28px}.reward-icon{font-size:27px}.rewards .heart-goal{grid-column:1/-1;background:#fff;border:1px solid #dbe3f4;display:block;padding:12px 16px;font-size:14px;font-weight:700}.heart-goal progress{margin:9px 0 0;height:9px}.heart-goal progress::-webkit-progress-value{background:#d8427c}.heart-goal progress::-moz-progress-bar{background:#d8427c}.reward-toast{background:#fff0b5;border:2px solid #f2d467;border-radius:16px;padding:14px;font-weight:750;text-align:center}.feedback.success{border:2px solid #75caa1}.primary{background:linear-gradient(120deg,#3158d5,#6241c8)}@media(prefers-reduced-motion:no-preference){.celebrating{animation:reward-pop .55s ease-out}@keyframes reward-pop{0%{transform:scale(.94)}50%{transform:scale(1.045)}100%{transform:scale(1)}}}
+</style>
 </head>
-
 <body>
- <div class="wrap">
-   <div class="topbar">
-     <div class="pill row">
-       <div class="hearts" id="hearts">♥♥♥♥♥</div>
-       <div class="pill" style="background:#11111a;">Richtig: <b id="correct">0</b></div>
-       <div class="pill" style="background:#11111a;">Tipps: <b id="hints">0</b></div>
-       <div class="pill" style="background:#11111a;">Wörter: <b id="wordCount">0</b></div>
-     </div>
-
-     <div class="row" style="align-items:flex-start;">
-       <div class="pill">Frage: <b id="progress">1</b>/<span id="total">0</span></div>
-
-       <div class="row">
-         <button class="modeBtn active" id="modeTypeBtn" type="button">Tippen</button>
-         <button class="modeBtn" id="modeMcBtn" type="button">Multiple Choice</button>
-       </div>
-
-       <button class="topRightBtn" id="openSheetBtn" type="button" title="Wörter verwalten">
-         <span>➕</span> <b>Neue Wörter</b>
-       </button>
-     </div>
-   </div>
-
-   <div class="card">
-     <p class="word" id="questionWord">...</p>
-
-     <!-- Typing mode -->
-     <div id="typingArea">
-       <input id="answer" type="text"
-         placeholder="Englisch eingeben..."
-         autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
-       />
-       <div class="btns">
-         <button class="primary" id="checkBtn" type="button">Prüfen</button>
-         <button id="hintBtn" type="button">Tipp (2 Buchstaben)</button>
-       </div>
-     </div>
-
-     <!-- MC mode -->
-     <div id="mcArea" style="display:none;">
-       <div class="choices" id="choices"></div>
-     </div>
-
-     <p class="muted" id="msg" style="margin:12px 0 0 0;"></p>
-     <p class="solution" id="solutionLine"></p>
-     <p class="small" style="margin:10px 0 0 0;">Tipp-Regel: pro <b>10 richtige</b> bekommst du <b>1 Tipp</b>.</p>
-   </div>
-
-   <div class="footer">dieser Seite wurde durch Mahir erstellt</div>
- </div>
-
- <!-- Blue screen -->
- <div class="blueOverlay" id="blueOverlay">
-   <div class="blueBox">
-     <p class="big">Jetzt kommen die Wörter, die du falsch hattest</p>
-     <p class="muted" id="wrongCountText"></p>
-   </div>
- </div>
-
- <!-- Final overlay -->
- <div class="centerOverlay" id="finalOverlay">
-   <div class="box" style="text-align:center;">
-     <p class="big" id="finalTitle">Fertig</p>
-     <p class="muted" id="finalText"></p>
-     <div class="btns" style="justify-content:center;">
-       <button id="exitBtn" type="button">App verlassen</button>
-       <button class="primary" id="continueBtn" type="button">Weitermachen</button>
-       <button id="repeatBtn" type="button">Wiederholen</button>
-     </div>
-   </div>
- </div>
-
- <!-- Bottom Sheet -->
- <div class="overlay" id="sheetOverlay" aria-hidden="true">
-   <div class="sheetBackdrop" id="sheetBackdrop"></div>
-
-   <div class="sheet" id="sheet">
-     <div class="sheetInner">
-       <div class="sheetHeader">
-         <div class="grabber"></div>
-         <div>
-           <div class="sheetTitle">Wörterverwaltung</div>
-           <div class="small">Format: <b>Deutsch = Englisch</b> (eine Zeile pro Paar)</div>
-         </div>
-         <button id="closeSheetBtn" type="button">Schließen</button>
-       </div>
-
-       <div class="sheetBody">
-         <label class="small">Neue Wörter</label>
-         <textarea id="newWordsList" placeholder="Apfel = apple
-Haus = house
-Wasser = water"></textarea>
-
-         <div class="btns">
-           <button class="primary" id="addWordsBtn" type="button">Wörter speichern</button>
-           <button id="refreshBtn" type="button">Liste aktualisieren</button>
-           <button class="danger" id="resetBtn" type="button">Auf Standard zurücksetzen</button>
-         </div>
-
-         <p id="panelMsg" class="muted" style="margin:10px 0 0 0;"></p>
-         <div id="wordListWrap" style="margin-top:12px;"></div>
-       </div>
-     </div>
-   </div>
- </div>
-
+<div class="wrap">
+<header><div class="brand"><div class="mark" aria-hidden="true">Aa</div><div><h1>Vokabel-Quiz</h1><p>Von Mahir · Für kleine Wortprofis</p></div></div><button class="admin-link" id="openAdmin">Admin</button></header>
+<main>
+<section id="learn" aria-label="Vokabeln üben">
+<div class="rewards" aria-label="Deine gesammelten Belohnungen"><div><span class="reward-icon" aria-hidden="true">⭐</span><strong id="pointsTotal">0</strong><span>Punkte</span></div><div><span class="reward-icon" aria-hidden="true">❤️</span><strong id="heartsTotal">0</strong><span>Herzen</span></div><div class="heart-goal"><span id="heartGoal">Noch 10 Punkte bis zum Herz</span><progress id="heartProgress" value="0" max="10" aria-label="Fortschritt zum nächsten Herz"></progress></div></div><p id="rewardToast" class="reward-toast" role="status" hidden></p>
+<div class="directions" role="group" aria-label="Übersetzungsrichtung"><button id="deEn" aria-pressed="true">Deutsch → Englisch</button><button id="enDe" aria-pressed="false">Englisch → Deutsch</button></div>
+<div class="stats"><span id="roundLabel">Deine Runde</span><span id="progressText"></span><span class="score" id="score"></span></div><progress id="progress" value="0" max="12" aria-label="Fortschritt"></progress>
+<div class="card" id="questionCard"><p class="eyebrow" id="instruction"></p><h2 class="word" id="word"></h2>
+<form id="answerForm"><label for="answer" id="answerLabel">Deine Antwort auf Englisch</label><input id="answer" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done" aria-describedby="feedback"><div class="actions"><button class="primary" id="check" type="submit">Antwort prüfen</button><button id="skip" type="button" class="secondary">Weiß ich noch nicht</button></div></form>
+<div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div><div class="actions" id="nextWrap" hidden><button class="primary" id="next">Nächstes Wort →</button></div>
+</div>
+<div class="card center" id="roundCard" hidden><p class="celebrate" aria-hidden="true">↻</p><h2>Noch einmal üben</h2><p id="roundMessage" class="helper"></p><button class="primary" id="retry">Wörter wiederholen</button></div>
+<div class="card center" id="finishCard" hidden><p class="celebrate" aria-hidden="true">🎉</p><h2>Alle Wörter geschafft!</h2><p id="finishMessage" class="helper"></p><button class="primary" id="restart">Noch eine Runde</button></div>
+<div class="rule"><b aria-hidden="true">?</b><p>Beim ersten Fehler helfen dir die <b style="background:none;color:inherit">ersten 2 Buchstaben</b>. Beim zweiten Fehler siehst du die Lösung. Schwierige Wörter übst du am Ende noch einmal.</p></div>
+</section>
+<section id="admin" class="card" hidden><div class="admin-head"><h2>Wörter verwalten</h2><button id="closeAdmin">Zurück zum Quiz</button></div><p class="notice">Die 70 fest gespeicherten Wörter sind Teil dieser Webseite und bleiben bis zur nächsten Aktualisierung erhalten. Zusätzlich eingegebene Wörter werden nur in diesem Browser gespeichert.</p><form id="addForm"><label for="newWords">Neue Wörter eingeben</label><p class="helper">Eine Zeile pro Wortpaar: Deutsch = Englisch</p><textarea id="newWords" placeholder="Apfel = apple&#10;Haus = house&#10;Wasser = water" required></textarea><div class="actions"><button class="primary" type="submit">Wörter speichern</button></div></form><p id="adminStatus" class="admin-status" role="status"></p><h3 id="listHeading"></h3><div id="wordList"></div><div class="actions"><button class="danger" id="clearCustom">Alle eigenen Wörter löschen</button></div></section>
+</main><footer>Jede richtige Antwort = 1 Punkt · 10 Punkte = 1 Herz<br><small>Deine Punkte bleiben in diesem Browser gespeichert.</small></footer></div>
+<dialog id="login"><form id="loginForm"><h2>Admin-Bereich</h2><label for="password">Passwort</label><input type="password" id="password" autocomplete="current-password" required><p id="loginError" class="error-text" role="alert"></p><div class="actions"><button class="primary" type="submit">Öffnen</button><button id="cancelLogin" type="button">Abbrechen</button></div></form></dialog>
 <script>
-(function () {
- "use strict";
-
- // ========= Storage / Defaults =========
- var STORAGE_KEY_WORDS = "words_all_safari_ok_v1";
- var MAX_LIVES = 5;
- var CORRECT_FOR_HINT = 10;
-
- var DEFAULT_WORDS = [
-   { prompt: "Hund", answer: "dog" },
-   { prompt: "Katze", answer: "cat" },
-   { prompt: "Haus", answer: "house" },
-   { prompt: "Wasser", answer: "water" },
-   { prompt: "Brot", answer: "bread" },
-   { prompt: "Buch", answer: "book" },
-   { prompt: "Auto", answer: "car" },
-   { prompt: "Schule", answer: "school" },
-   { prompt: "Freund", answer: "friend" },
-   { prompt: "Stadt", answer: "city" },
-   { prompt: "Baum", answer: "tree" },
-   { prompt: "Sonne", answer: "sun" }
- ];
-
- function normalize(s) { return String(s || "").trim().toLowerCase(); }
- function safeParse(json, fallback) { try { return JSON.parse(json); } catch(e) { return fallback; } }
- function escapeHtml(str) {
-   return String(str || "")
-     .replace(/&/g,"&amp;")
-     .replace(/</g,"&lt;")
-     .replace(/>/g,"&gt;")
-     .replace(/"/g,"&quot;")
-     .replace(/'/g,"&#039;");
- }
-
- function seedIfEmpty() {
-   var stored = localStorage.getItem(STORAGE_KEY_WORDS);
-   if (!stored) {
-     localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(DEFAULT_WORDS));
-     return;
-   }
-   var parsed = safeParse(stored, null);
-   if (!Array.isArray(parsed)) {
-     localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(DEFAULT_WORDS));
-   }
- }
-
- function loadWords() {
-   seedIfEmpty();
-   var words = safeParse(localStorage.getItem(STORAGE_KEY_WORDS) || "[]", []);
-   var cleaned = [];
-   for (var i=0;i<words.length;i++){
-     var w = words[i];
-     if (!w || typeof w.prompt !== "string" || typeof w.answer !== "string") continue;
-     var de = w.prompt.trim();
-     var en = normalize(w.answer);
-     if (!de || !en) continue;
-     cleaned.push({ prompt: de, answer: en });
-   }
-   return cleaned;
- }
-
- function saveWords(words) {
-   localStorage.setItem(STORAGE_KEY_WORDS, JSON.stringify(words));
- }
-
- function shuffle(arr) {
-   for (var i = arr.length - 1; i > 0; i--) {
-     var j = Math.floor(Math.random() * (i + 1));
-     var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-   }
-   return arr;
- }
-
- // ========= UI refs =========
- var heartsEl = document.getElementById("hearts");
- var correctEl = document.getElementById("correct");
- var hintsEl = document.getElementById("hints");
- var wordCountEl = document.getElementById("wordCount");
- var progressEl = document.getElementById("progress");
- var totalEl = document.getElementById("total");
-
- var questionWordEl = document.getElementById("questionWord");
- var msgEl = document.getElementById("msg");
- var solutionEl = document.getElementById("solutionLine");
-
- var typingArea = document.getElementById("typingArea");
- var mcArea = document.getElementById("mcArea");
- var answerEl = document.getElementById("answer");
- var checkBtn = document.getElementById("checkBtn");
- var hintBtn = document.getElementById("hintBtn");
- var choicesEl = document.getElementById("choices");
-
- var modeTypeBtn = document.getElementById("modeTypeBtn");
- var modeMcBtn = document.getElementById("modeMcBtn");
-
- var blueOverlay = document.getElementById("blueOverlay");
- var wrongCountText = document.getElementById("wrongCountText");
-
- var finalOverlay = document.getElementById("finalOverlay");
- var finalTitle = document.getElementById("finalTitle");
- var finalText = document.getElementById("finalText");
- var exitBtn = document.getElementById("exitBtn");
- var continueBtn = document.getElementById("continueBtn");
- var repeatBtn = document.getElementById("repeatBtn");
-
- // sheet
- var openSheetBtn = document.getElementById("openSheetBtn");
- var sheetOverlay = document.getElementById("sheetOverlay");
- var sheetBackdrop = document.getElementById("sheetBackdrop");
- var sheet = document.getElementById("sheet");
- var closeSheetBtn = document.getElementById("closeSheetBtn");
- var newWordsList = document.getElementById("newWordsList");
- var addWordsBtn = document.getElementById("addWordsBtn");
- var refreshBtn = document.getElementById("refreshBtn");
- var resetBtn = document.getElementById("resetBtn");
- var panelMsg = document.getElementById("panelMsg");
- var wordListWrap = document.getElementById("wordListWrap");
-
- // ========= Game state =========
- var mode = "type"; // "type" | "mc"
- var lives = MAX_LIVES;
- var correctTotal = 0;
- var correctSinceHint = 0;
- var hintsAvailable = 0;
-
- var pool = [];
- var wrongPool = [];
- var index = 0;
- var locked = false;
- var hintShown = false;
-
- function setMessage(t){ msgEl.textContent = t || ""; }
- function showSolutionLine(t){ solutionEl.textContent = t; solutionEl.style.display = "block"; }
- function hideSolutionLine(){ solutionEl.textContent = ""; solutionEl.style.display = "none"; }
- function setPanelMessage(t){ panelMsg.textContent = t || ""; }
-
- function flash(cls) {
-   document.body.classList.add(cls);
-   setTimeout(function(){ document.body.classList.remove(cls); }, 250);
- }
-
- function updateTopUI(){
-   heartsEl.textContent = new Array(lives + 1).join("♥") + new Array((MAX_LIVES - lives) + 1).join("♡");
-   correctEl.textContent = String(correctTotal);
-   hintsEl.textContent = String(hintsAvailable);
-   wordCountEl.textContent = String(loadWords().length);
-
-   progressEl.textContent = String(Math.min(index + 1, pool.length || 0) || 0);
-   totalEl.textContent = String(pool.length);
-
-   hintBtn.disabled = locked || hintShown || hintsAvailable <= 0 || mode !== "type";
- }
-
- function currentItem(){ return pool[index]; }
-
- function awardHintIfNeeded(){
-   while (correctSinceHint >= CORRECT_FOR_HINT) {
-     correctSinceHint -= CORRECT_FOR_HINT;
-     hintsAvailable += 1;
-   }
- }
-
- function markWrong(item){
-   if (!item) return;
-   for (var i=0;i<wrongPool.length;i++){
-     if (wrongPool[i].prompt === item.prompt && wrongPool[i].answer === item.answer) return;
-   }
-   wrongPool.push(item);
- }
-
- function startRoundFrom(words){
-   pool = shuffle(words.slice());
-   wrongPool = [];
-   index = 0;
-   renderQuestion();
- }
-
- function startGame(resetProgress){
-   lives = MAX_LIVES;
-   if (resetProgress) {
-     correctTotal = 0;
-     hintsAvailable = 0;
-     correctSinceHint = 0;
-   }
-   var words = loadWords();
-   startRoundFrom(words);
- }
-
- function endOfRound(){
-   if (wrongPool.length > 0) {
-     blueOverlay.classList.add("show");
-     wrongCountText.textContent = "Falsche Wörter: " + wrongPool.length;
-     setTimeout(function(){
-       blueOverlay.classList.remove("show");
-       startRoundFrom(wrongPool);
-     }, 3000);
-     return;
-   }
-   finalTitle.textContent = "Herzlichen Glückwunsch, du hast es bis zum Ende geschafft";
-   finalText.textContent = "Richtig insgesamt: " + correctTotal + ". Herzen übrig: " + lives + ".";
-   finalOverlay.classList.add("show");
- }
-
- function nextQuestion(){
-   index += 1;
-   if (index >= pool.length) endOfRound();
-   else renderQuestion();
- }
-
- function setMode(newMode){
-   mode = newMode;
-   modeTypeBtn.classList.toggle("active", mode === "type");
-   modeMcBtn.classList.toggle("active", mode === "mc");
-   typingArea.style.display = mode === "type" ? "block" : "none";
-   mcArea.style.display = mode === "mc" ? "block" : "none";
-
-   locked = false;
-   hintShown = false;
-   hideSolutionLine();
-   setMessage("");
-   renderQuestion();
- }
-
- function renderQuestion(){
-   locked = false;
-   hintShown = false;
-   hideSolutionLine();
-   setMessage("");
-
-   var item = currentItem();
-   questionWordEl.textContent = item ? item.prompt : "(keine Wörter)";
-   updateTopUI();
-
-   if (!item) return;
-
-   if (mode === "type") {
-     answerEl.value = "";
-     answerEl.focus();
-   } else {
-     renderChoices(item);
-   }
- }
-
- // ========= Typing mode =========
- function checkTyping(){
-   if (locked) return;
-   var item = currentItem();
-   if (!item) return;
-
-   var user = normalize(answerEl.value);
-   if (!user) { setMessage("Du musst etwas eingeben."); return; }
-
-   locked = true;
-   updateTopUI();
-
-   var expected = normalize(item.answer);
-   if (user === expected) {
-     setMessage("✅ Richtig!");
-     correctTotal += 1;
-     correctSinceHint += 1;
-     awardHintIfNeeded();
-     flash("flashRight");
-     setTimeout(nextQuestion, 250);
-   } else {
-     setMessage("❌ Falsch.");
-     flash("flashWrong");
-     lives -= 1;
-     markWrong(item);
-
-     showSolutionLine("Richtig: " + item.prompt + " = " + item.answer);
-
-     if (lives <= 0) {
-       setTimeout(function(){
-         finalTitle.textContent = "Game Over";
-         finalText.textContent = "Du hast keine Herzen mehr.";
-         finalOverlay.classList.add("show");
-       }, 600);
-       return;
-     }
-
-     // 5 Sekunden Lösung anzeigen, dann automatisch weiter
-     setTimeout(function(){
-       hideSolutionLine();
-       nextQuestion();
-     }, 5000);
-   }
- }
-
- function useHint(){
-   if (locked || mode !== "type") return;
-   if (hintsAvailable <= 0 || hintShown) return;
-   var item = currentItem();
-   var first2 = (item && item.answer) ? item.answer.slice(0,2) : "";
-   setMessage('Tipp: beginnt mit "' + first2 + '"');
-   hintsAvailable -= 1;
-   hintShown = true;
-   updateTopUI();
- }
-
- // ========= Multiple choice =========
- function renderChoices(item){
-   choicesEl.innerHTML = "";
-
-   var words = loadWords();
-   var correct = item.answer;
-   var poolAnswers = [];
-   for (var i=0;i<words.length;i++){
-     if (words[i].answer && words[i].answer !== correct) poolAnswers.push(words[i].answer);
-   }
-   // unique
-   var uniq = [];
-   var seen = {};
-   for (var j=0;j<poolAnswers.length;j++){
-     var a = poolAnswers[j];
-     if (!seen[a]) { seen[a] = true; uniq.push(a); }
-   }
-   shuffle(uniq);
-
-   var options = [correct];
-   if (uniq[0]) options.push(uniq[0]);
-   if (uniq[1]) options.push(uniq[1]);
-   while (options.length < 3) options.push(correct); // fallback if too few words
-
-   // ensure exactly 3
-   options = options.slice(0,3);
-   shuffle(options);
-
-   for (var k=0;k<options.length;k++){
-     (function(opt){
-       var b = document.createElement("button");
-       b.type = "button";
-       b.className = "choiceBtn";
-       b.textContent = opt;
-       b.addEventListener("click", function(){ chooseMc(opt); });
-       choicesEl.appendChild(b);
-     })(options[k]);
-   }
- }
-
- function setChoicesDisabled(dis){
-   var btns = choicesEl.querySelectorAll("button");
-   for (var i=0;i<btns.length;i++) btns[i].disabled = dis;
- }
-
- function chooseMc(selected){
-   if (locked) return;
-   var item = currentItem();
-   if (!item) return;
-
-   locked = true;
-   setChoicesDisabled(true);
-
-   var correct = item.answer;
-
-   if (normalize(selected) === normalize(correct)) {
-     setMessage("✅ Richtig!");
-     correctTotal += 1;
-     correctSinceHint += 1;
-     awardHintIfNeeded();
-     flash("flashRight");
-
-     setTimeout(function(){
-       setChoicesDisabled(false);
-       nextQuestion();
-     }, 2000);
-   } else {
-     setMessage("❌ Falsch.");
-     flash("flashWrong");
-     lives -= 1;
-     markWrong(item);
-
-     showSolutionLine("Richtig: " + item.prompt + " = " + item.answer);
-
-     if (lives <= 0) {
-       setTimeout(function(){
-         finalTitle.textContent = "Game Over";
-         finalText.textContent = "Du hast keine Herzen mehr.";
-         finalOverlay.classList.add("show");
-       }, 600);
-       return;
-     }
-
-     setTimeout(function(){
-       hideSolutionLine();
-       setChoicesDisabled(false);
-       nextQuestion();
-     }, 2000);
-   }
-
-   updateTopUI();
- }
-
- // ========= Sheet (Words management) =========
- function openSheet(){
-   sheetOverlay.classList.add("show");
-   sheetBackdrop.classList.add("show");
-   sheet.classList.add("show");
-   sheetOverlay.setAttribute("aria-hidden", "false");
-   renderWordList();
-   setPanelMessage("");
-   setTimeout(function(){ newWordsList.focus(); }, 50);
- }
-
- function closeSheet(){
-   sheetBackdrop.classList.remove("show");
-   sheet.classList.remove("show");
-   sheetOverlay.setAttribute("aria-hidden", "true");
-   setTimeout(function(){ sheetOverlay.classList.remove("show"); }, 220);
- }
-
- function parseWordLines(text) {
-   var lines = String(text || "").split("\n");
-   var pairs = [];
-   for (var i=0;i<lines.length;i++){
-     var line = lines[i].trim();
-     if (!line) continue;
-     var parts = line.split("=");
-     if (parts.length !== 2) continue;
-     var de = parts[0].trim();
-     var en = normalize(parts[1]);
-     if (!de || !en) continue;
-     pairs.push({ prompt: de, answer: en });
-   }
-   return pairs;
- }
-
- function addWordsFromList(){
-   var pairs = parseWordLines(newWordsList.value);
-   if (pairs.length === 0) {
-     setPanelMessage("Keine gültigen Zeilen gefunden. Format: Deutsch = Englisch");
-     return;
-   }
-
-   var words = loadWords();
-   var added = 0, skipped = 0;
-
-   for (var i=0;i<pairs.length;i++){
-     var p = pairs[i];
-     var exists = false;
-     for (var j=0;j<words.length;j++){
-       if (normalize(words[j].prompt) === normalize(p.prompt) && normalize(words[j].answer) === normalize(p.answer)) {
-         exists = true; break;
-       }
-     }
-     if (exists) { skipped += 1; continue; }
-     words.push(p);
-     added += 1;
-   }
-
-   saveWords(words);
-   newWordsList.value = "";
-   setPanelMessage("Gespeichert: " + added + " | Übersprungen: " + skipped);
-
-   renderWordList();
-   // ✅ sofort Quiz mit neuen Wörtern starten
-   startGame(false);
- }
-
- function deleteWordByIndex(idx){
-   var words = loadWords();
-   if (idx < 0 || idx >= words.length) return;
-   words.splice(idx, 1);
-   saveWords(words);
-   setPanelMessage("Wort gelöscht.");
-   renderWordList();
-   startGame(false);
- }
-
- function resetToDefault(){
-   saveWords(DEFAULT_WORDS);
-   setPanelMessage("Zurückgesetzt auf Standard.");
-   renderWordList();
-   startGame(true);
- }
-
- function renderWordList(){
-   var words = loadWords();
-   if (words.length === 0) {
-     wordListWrap.innerHTML = '<div class="pill">Keine Wörter vorhanden.</div>';
-     return;
-   }
-
-   var rows = "";
-   for (var i=0;i<words.length;i++){
-     rows += '<tr>'
-       + '<td>' + escapeHtml(words[i].prompt) + '</td>'
-       + '<td>' + escapeHtml(words[i].answer) + '</td>'
-       + '<td><button class="danger" data-del="' + i + '" type="button">Löschen</button></td>'
-       + '</tr>';
-   }
-
-   wordListWrap.innerHTML =
-     '<div class="pill" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">'
-     + '<span>Wörter gesamt: <b>' + words.length + '</b></span>'
-     + '<span class="small">Änderungen gelten lokal (Browser).</span>'
-     + '</div>'
-     + '<table><thead><tr><th>Deutsch</th><th>Englisch</th><th>Aktion</th></tr></thead><tbody>'
-     + rows
-     + '</tbody></table>';
-
-   var btns = wordListWrap.querySelectorAll("button[data-del]");
-   for (var k=0;k<btns.length;k++){
-     (function(b){
-       b.addEventListener("click", function(){
-         var idx = parseInt(b.getAttribute("data-del"), 10);
-         deleteWordByIndex(idx);
-       });
-     })(btns[k]);
-   }
-
-   updateTopUI();
- }
-
- // ========= Events =========
- modeTypeBtn.addEventListener("click", function(){ setMode("type"); });
- modeMcBtn.addEventListener("click", function(){ setMode("mc"); });
-
- checkBtn.addEventListener("click", checkTyping);
- answerEl.addEventListener("keydown", function(e){ if (e.key === "Enter") checkTyping(); });
- hintBtn.addEventListener("click", useHint);
-
- openSheetBtn.addEventListener("click", openSheet);
- closeSheetBtn.addEventListener("click", closeSheet);
- sheetBackdrop.addEventListener("click", closeSheet);
-
- addWordsBtn.addEventListener("click", addWordsFromList);
- refreshBtn.addEventListener("click", renderWordList);
- resetBtn.addEventListener("click", resetToDefault);
-
- exitBtn.addEventListener("click", function(){
-   finalOverlay.classList.remove("show");
-   alert("Du kannst den Tab jetzt schließen.");
- });
- continueBtn.addEventListener("click", function(){
-   finalOverlay.classList.remove("show");
-   startGame(false);
- });
- repeatBtn.addEventListener("click", function(){
-   finalOverlay.classList.remove("show");
-   startGame(true);
- });
-
- // ========= Start =========
- startGame(true);
-})();
+const DEFAULT_WORDS = [
+  {
+    "prompt": "der Urlaub, die Ferien",
+    "answer": "holiday"
+  },
+  {
+    "prompt": "zuerst, als Erstes",
+    "answer": "first"
+  },
+  {
+    "prompt": "sonnig",
+    "answer": "sunny"
+  },
+  {
+    "prompt": "besuchen",
+    "answer": "to visit"
+  },
+  {
+    "prompt": "berühmt",
+    "answer": "famous"
+  },
+  {
+    "prompt": "die Burg, das Schloss",
+    "answer": "castle"
+  },
+  {
+    "prompt": "der Halbbruder",
+    "answer": "half brother"
+  },
+  {
+    "prompt": "wieder, noch (ein)mal",
+    "answer": "again"
+  },
+  {
+    "prompt": "zurück",
+    "answer": "back"
+  },
+  {
+    "prompt": "das Wetter",
+    "answer": "weather"
+  },
+  {
+    "prompt": "Glück haben",
+    "answer": "to be lucky"
+  },
+  {
+    "prompt": "Spanien",
+    "answer": "Spain"
+  },
+  {
+    "prompt": "übernachten, wohnen",
+    "answer": "to stay"
+  },
+  {
+    "prompt": "der Strand",
+    "answer": "beach"
+  },
+  {
+    "prompt": "Deutsch; deutsch",
+    "answer": "German"
+  },
+  {
+    "prompt": "kalt",
+    "answer": "cold"
+  },
+  {
+    "prompt": "regnerisch",
+    "answer": "rainy"
+  },
+  {
+    "prompt": "Wie geht es dir/Ihnen/euch?",
+    "answer": "How are you?"
+  },
+  {
+    "prompt": "Es geht mir gut.",
+    "answer": "I'm fine."
+  },
+  {
+    "prompt": "schön",
+    "answer": "beautiful"
+  },
+  {
+    "prompt": "der Turm",
+    "answer": "tower"
+  },
+  {
+    "prompt": "der Weg",
+    "answer": "way"
+  },
+  {
+    "prompt": "das obere Ende, die Spitze",
+    "answer": "top"
+  },
+  {
+    "prompt": "die Sicht; der (Aus)blick, die Aussicht",
+    "answer": "view"
+  },
+  {
+    "prompt": "die Küste",
+    "answer": "coast"
+  },
+  {
+    "prompt": "aussehen",
+    "answer": "to look"
+  },
+  {
+    "prompt": "windig",
+    "answer": "windy"
+  },
+  {
+    "prompt": "bewölkt, bedeckt",
+    "answer": "cloudy"
+  },
+  {
+    "prompt": "Gern geschehen, Bitte.",
+    "answer": "You're welcome."
+  },
+  {
+    "prompt": "sie, ihnen",
+    "answer": "them"
+  },
+  {
+    "prompt": "gestern",
+    "answer": "yesterday"
+  },
+  {
+    "prompt": "Zeit haben",
+    "answer": "to be free"
+  },
+  {
+    "prompt": "der Kühlschrank",
+    "answer": "fridge"
+  },
+  {
+    "prompt": "der Campingplatz, der Zeltplatz",
+    "answer": "campsite"
+  },
+  {
+    "prompt": "der Delfin",
+    "answer": "dolphin"
+  },
+  {
+    "prompt": "(eine Woche) lang",
+    "answer": "for (one week)"
+  },
+  {
+    "prompt": "die Woche",
+    "answer": "week"
+  },
+  {
+    "prompt": "das Lagerfeuer",
+    "answer": "campfire"
+  },
+  {
+    "prompt": "die Postkarte",
+    "answer": "postcard"
+  },
+  {
+    "prompt": "gehen, laufen",
+    "answer": "to walk"
+  },
+  {
+    "prompt": "die Stunde",
+    "answer": "hour"
+  },
+  {
+    "prompt": "die Wolke",
+    "answer": "cloud"
+  },
+  {
+    "prompt": "der Himmel",
+    "answer": "sky"
+  },
+  {
+    "prompt": "bis bald",
+    "answer": "bye for now"
+  },
+  {
+    "prompt": "der Sommer",
+    "answer": "summer"
+  },
+  {
+    "prompt": "die Eiscreme",
+    "answer": "ice cream"
+  },
+  {
+    "prompt": "im Freien, draußen",
+    "answer": "outside"
+  },
+  {
+    "prompt": "die Fahrt, die Tour",
+    "answer": "ride"
+  },
+  {
+    "prompt": "das Tagebuch",
+    "answer": "diary"
+  },
+  {
+    "prompt": "gelangweilt",
+    "answer": "bored"
+  },
+  {
+    "prompt": "bei jdm übernachten, wohnen",
+    "answer": "to stay with sb"
+  },
+  {
+    "prompt": "spazieren gehen",
+    "answer": "to go for a walk"
+  },
+  {
+    "prompt": "die Nacht",
+    "answer": "night"
+  },
+  {
+    "prompt": "regnen",
+    "answer": "to rain"
+  },
+  {
+    "prompt": "drinnen; innen; (in ...) hinein",
+    "answer": "inside"
+  },
+  {
+    "prompt": "schon",
+    "answer": "already"
+  },
+  {
+    "prompt": "traurig",
+    "answer": "sad"
+  },
+  {
+    "prompt": "einsam",
+    "answer": "lonely"
+  },
+  {
+    "prompt": "mieten, (aus)leihen",
+    "answer": "to hire"
+  },
+  {
+    "prompt": "uns",
+    "answer": "us"
+  },
+  {
+    "prompt": "die Soße",
+    "answer": "sauce"
+  },
+  {
+    "prompt": "wunderbar, wundervoll",
+    "answer": "wonderful"
+  },
+  {
+    "prompt": "das Ende",
+    "answer": "end"
+  },
+  {
+    "prompt": "die (Uhr)zeit",
+    "answer": "time"
+  },
+  {
+    "prompt": "gelangen",
+    "answer": "to get"
+  },
+  {
+    "prompt": "mit (dem Bus)",
+    "answer": "by (bus)"
+  },
+  {
+    "prompt": "der Zug, die Eisenbahn",
+    "answer": "train"
+  },
+  {
+    "prompt": "das Flugzeug",
+    "answer": "plane"
+  },
+  {
+    "prompt": "die Wohnung",
+    "answer": "apartment"
+  },
+  {
+    "prompt": "Wie ist ...?",
+    "answer": "What's ... like?"
+  }
+];
+const STORAGE_KEY_CUSTOM='custom_words_v2';
+const REWARD_KEY='vokabel_quiz_rewards_v1';
+const ADMIN_PASSWORD_HASH='e778a1f8e13abbc4c4ab045b2f0f51cf4b8eb4aa01b756a9add08a13b6e69007';
+async function validAdminPassword(value){const bytes=new TextEncoder().encode(value);const digest=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')===ADMIN_PASSWORD_HASH;}
+const $=id=>document.getElementById(id);
+const normalize=value=>String(value??'').normalize('NFC').trim().toLocaleLowerCase().replace(/\s+/g,' ');
+// Accept individual meanings, optional parenthetical parts and articles.
+function variants(text){
+  let out=[text];
+  for(let n=0;n<8&&out.some(s=>/\([^()]*\)/.test(s));n++){
+    out=out.flatMap(s=>{const m=s.match(/\(([^()]*)\)/);return m?[s.replace(m[0],m[1]),s.replace(m[0],'')]:[s]});
+  }
+  return out;
+}
+function answerKey(text){return normalize(text).replace(/[’‘]/g,"'").replace(/[…]/g,'...').replace(/[.!?]+$/,'').trim()}
+function acceptableAnswers(){
+ const text=current().solution;
+ const parts=direction==='en-de'?text.split(/[,;]/):[text];
+ let forms=parts.flatMap(variants);
+ if(direction==='en-de')forms=forms.flatMap(s=>s.includes('dir/Ihnen/euch')?['dir','Ihnen','euch'].map(p=>s.replace('dir/Ihnen/euch',p)):[s]);
+ if(direction==='en-de')forms=forms.flatMap(s=>[s,s.trim().replace(/^(der|die|das)\s+/i,'')]);
+ else forms=forms.flatMap(s=>[s,s.replace(/^to /i,'')]);
+ return forms.map(answerKey).filter(Boolean);
+}
+function hintStart(){
+ let text=current().solution;
+ if(direction==='en-de')text=text.split(/[,;]/)[0].trim().replace(/^(der|die|das)\s+/i,'');
+ else text=text.replace(/^to /i,'');
+ text=variants(text)[0];
+ return Array.from(text).slice(0,2).join('');
+}
+let custom=[],storageProblem=false;
+try{const raw=JSON.parse(localStorage.getItem(STORAGE_KEY_CUSTOM)||'[]');if(!Array.isArray(raw))throw Error();custom=raw.filter(w=>w&&typeof w.prompt==='string'&&typeof w.answer==='string'&&w.prompt.trim()&&w.answer.trim())}catch{storageProblem=true}
+let points=0,rewardStorageError=false;
+try{const saved=JSON.parse(localStorage.getItem(REWARD_KEY)||'0');if(Number.isSafeInteger(saved)&&saved>=0)points=saved}catch{rewardStorageError=true}
+function renderRewards(){
+ $('pointsTotal').textContent=points;
+ $('heartsTotal').textContent=Math.floor(points/10);
+ $('heartProgress').value=points%10;
+ $('heartGoal').textContent='Noch '+(10-points%10)+' Punkte bis zum nächsten Herz';
+}
+function awardPoint(){
+ points++;
+ try{localStorage.setItem(REWARD_KEY,JSON.stringify(points));rewardStorageError=false}catch{rewardStorageError=true}
+ renderRewards();
+ $('rewardToast').hidden=false;
+ $('rewardToast').textContent=points%10===0?'❤️ Neues Herz! Du hast schon '+Math.floor(points/10)+' gesammelt!':'⭐ +1 Punkt! Weiter so!';
+ if(rewardStorageError)$('rewardToast').textContent+=' Punkte konnten nicht dauerhaft gespeichert werden.';
+ $('rewardToast').classList.remove('celebrating');
+ void $('rewardToast').offsetWidth;
+ $('rewardToast').classList.add('celebrating');
+}
+let direction='de-en',pool=[],wrong=[],position=0,attempt=0,phase='answer',round=1,firstCorrect=0,total=0,isAdmin=false;
+const allWords=()=>[...DEFAULT_WORDS,...custom];
+function shuffle(words){let a=[...words];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function current(){const w=pool[position];return direction==='de-en'?{question:w.prompt,solution:w.answer}:{question:w.answer,solution:w.prompt}}
+function feedback(text,type){$('feedback').textContent=text;$('feedback').className='feedback '+type;$('feedback').hidden=false}
+function stats(){ $('roundLabel').textContent=round===1?'Deine Runde':'Wiederholung '+(round-1);$('progressText').textContent=Math.min(position+1,pool.length)+' / '+pool.length;$('score').textContent=firstCorrect+' direkt richtig';$('progress').max=pool.length;$('progress').value=position; }
+function showQuestion(){$('rewardToast').hidden=true;phase='answer';attempt=0;$('questionCard').hidden=false;$('roundCard').hidden=true;$('finishCard').hidden=true;$('feedback').hidden=true;$('nextWrap').hidden=true;$('answerForm').hidden=false;$('answer').disabled=false;$('check').disabled=false;$('skip').disabled=false;$('answer').value='';$('answer').removeAttribute('aria-invalid');$('word').textContent=current().question;$('instruction').textContent=direction==='de-en'?'Wie heißt das auf Englisch?':'Wie heißt das auf Deutsch?';$('answerLabel').textContent=direction==='de-en'?'Deine Antwort auf Englisch':'Deine Antwort auf Deutsch';$('answer').lang=direction==='de-en'?'en':'de';stats()}
+function start(){pool=shuffle(allWords());wrong=[];position=0;round=1;firstCorrect=0;total=pool.length;showQuestion()}
+function markWrong(){const w=pool[position];if(!wrong.includes(w))wrong.push(w)}
+function resolve(){phase='resolved';$('answer').disabled=true;$('check').disabled=true;$('skip').disabled=true;$('nextWrap').hidden=false;$('next').textContent=position===pool.length-1?'Runde abschließen →':'Nächstes Wort →';$('next').focus()}
+function check(event){event.preventDefault();if(phase!=='answer')return;const value=normalize($('answer').value);if(!value){feedback('Trage zuerst ein Wort ein.','tip');$('answer').focus();return}if(acceptableAnswers().includes(answerKey(value))){awardPoint();if(attempt===0&&round===1)firstCorrect++;$('answer').removeAttribute('aria-invalid');feedback(attempt===0?'Richtig! Gut gemacht.':'Richtig! Am Ende übst du dieses Wort noch einmal.','success');stats();resolve();return}attempt++;markWrong();$('answer').setAttribute('aria-invalid','true');if(attempt===1){feedback('Noch nicht ganz. Tipp: Das Wort beginnt mit „'+hintStart()+'“. Versuche es noch einmal.','tip');$('answer').focus();$('answer').select()}else{feedback('Die richtige Antwort ist: '+current().solution+'. Du übst dieses Wort am Ende noch einmal.','error');resolve()}}
+function next(){if(phase!=='resolved')return;position++;if(position<pool.length){showQuestion();$('answer').focus();return}$('questionCard').hidden=true;$('progress').value=pool.length;$('progressText').textContent=pool.length+' / '+pool.length;if(wrong.length){phase='round';$('roundCard').hidden=false;$('roundMessage').textContent=wrong.length+' '+(wrong.length===1?'Wort braucht':'Wörter brauchen')+' noch etwas Übung. Jetzt kommen nur diese Wörter, bis du sie ohne Tipp richtig beantwortest.';$('retry').focus()}else{phase='finish';$('finishCard').hidden=false;$('finishMessage').textContent=total+' Wörter geübt. Davon hast du '+firstCorrect+' gleich beim ersten Versuch gewusst.';$('restart').focus()}}
+$('answerForm').addEventListener('submit',check);
+$('skip').onclick=()=>{if(phase!=='answer')return;markWrong();feedback('Die richtige Antwort ist: '+current().solution+'. Dieses Wort kommt noch einmal dran.','error');resolve()};
+$('next').onclick=next;$('retry').onclick=()=>{pool=shuffle(wrong);wrong=[];position=0;round++;showQuestion();$('answer').focus()};$('restart').onclick=start;
+function setDirection(value){if(direction===value)return;if((position>0||attempt>0||phase!=='answer')&&!confirm('Richtung wechseln und eine neue Runde starten?'))return;direction=value;$('deEn').setAttribute('aria-pressed',value==='de-en');$('enDe').setAttribute('aria-pressed',value==='en-de');start()}
+$('deEn').onclick=()=>setDirection('de-en');$('enDe').onclick=()=>setDirection('en-de');
+function save(words){try{localStorage.setItem(STORAGE_KEY_CUSTOM,JSON.stringify(words));custom=words;storageProblem=false;return true}catch{$('adminStatus').textContent='Speichern hat nicht geklappt. Prüfe, ob der Browser das Speichern von Websitedaten erlaubt.';return false}}
+function renderList(){const all=allWords();$('listHeading').textContent=all.length+' Wörter · '+custom.length+' eigene';$('wordList').replaceChildren();all.forEach((w,i)=>{const row=document.createElement('div');row.className='word-row';const pair=document.createElement('div');pair.className='pair';const de=document.createElement('b'),en=document.createElement('span');de.textContent=w.prompt;en.textContent=w.answer;pair.append(de,en);row.append(pair);if(i<DEFAULT_WORDS.length){const badge=document.createElement('small');badge.textContent='Fest gespeichert';row.append(badge)}else{const button=document.createElement('button');button.textContent='Löschen';button.className='danger';button.setAttribute('aria-label',w.prompt+' löschen');button.onclick=()=>{if(!isAdmin||!confirm('„'+w.prompt+'“ löschen?'))return;if(save(custom.filter((_,j)=>j!==i-DEFAULT_WORDS.length))){$('adminStatus').textContent='Wort gelöscht. Änderungen gelten ab der nächsten Runde.';renderList()}};row.append(button)}$('wordList').append(row)});$('clearCustom').disabled=!custom.length}
+$('openAdmin').onclick=()=>{if(isAdmin)return;$('password').value='';$('loginError').textContent='';$('login').showModal()};$('cancelLogin').onclick=()=>$('login').close();
+$('loginForm').onsubmit=async e=>{e.preventDefault();let valid=false;try{valid=await validAdminPassword($('password').value)}catch{$('loginError').textContent='Bitte öffne das Quiz über den HTTPS-Webseiten-Link.';return}if(!valid){$('loginError').textContent='Das Passwort stimmt nicht.';return}isAdmin=true;$('login').close();$('learn').hidden=true;$('admin').hidden=false;$('adminStatus').textContent=storageProblem?'Gespeicherte Wörter konnten nicht geladen werden. Prüfe die Browsereinstellungen.':'';renderList();$('newWords').focus()};
+$('closeAdmin').onclick=()=>{isAdmin=false;$('admin').hidden=true;$('learn').hidden=false;$('openAdmin').focus()};
+$('addForm').onsubmit=e=>{e.preventDefault();if(!isAdmin)return;const words=[...custom];let added=0,duplicates=0;const invalid=[];const lines=$('newWords').value.split('\n');lines.forEach((line,i)=>{if(!line.trim())return;const parts=line.split('=');if(parts.length!==2||!parts[0].trim()||!parts[1].trim()){invalid.push(i+1);return}const word={prompt:parts[0].trim(),answer:parts[1].trim()};if([...DEFAULT_WORDS,...words].some(w=>normalize(w.prompt)===normalize(word.prompt)&&normalize(w.answer)===normalize(word.answer))){duplicates++;return}words.push(word);added++});if(invalid.length){$('adminStatus').textContent='Noch nichts gespeichert. Bitte Zeile '+invalid.join(', ')+' korrigieren: Deutsch = Englisch.';return}if(!added){$('adminStatus').textContent=duplicates?'Diese Wörter sind schon vorhanden.':'Bitte mindestens ein Wortpaar eingeben.';return}if(save(words)){$('newWords').value='';$('adminStatus').textContent=added+' Wörter gespeichert.'+(duplicates?' '+duplicates+' bereits vorhanden.':'')+' Sie erscheinen ab der nächsten Runde.';renderList()}};
+$('clearCustom').onclick=()=>{if(!isAdmin||!confirm('Alle eigenen Wörter wirklich löschen? Die fest gespeicherten Wörter bleiben erhalten.'))return;if(save([])){$('adminStatus').textContent='Eigene Wörter gelöscht. Änderungen gelten ab der nächsten Runde.';renderList()}};
+renderRewards();
+start();
 </script>
-</body>
-</html>
+</body></html>
