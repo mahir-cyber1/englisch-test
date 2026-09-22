@@ -23,7 +23,7 @@ body{background:linear-gradient(145deg,#e6f3ff 0%,#f0e8ff 48%,#fff0da 100%);min-
 <section id="learn" aria-label="Vokabeln üben">
 <div class="answer-counts" aria-label="Antworten in dieser Übung"><div class="correct-count">Richtig: <strong id="correctCount">0</strong></div><div class="wrong-count">Falsch: <strong id="wrongCount">0</strong></div><div class="near-count">Fast richtig: <strong id="nearCount">0</strong></div></div>
 <div class="directions" role="group" aria-label="Übersetzungsrichtung"><button id="deEn" aria-pressed="true">Deutsch → Englisch</button><button id="enDe" aria-pressed="false">Englisch → Deutsch</button></div>
-<div class="card" id="questionCard"><p class="eyebrow" id="instruction"></p><div class="word-heading"><h2 class="word" id="word"></h2><div class="word-progress"><span id="roundLabel">Deine Runde</span><strong id="progressText"></strong><progress id="progress" value="0" max="70" aria-label="Fortschritt"></progress></div></div>
+<div class="card" id="questionCard"><p class="eyebrow" id="instruction"></p><div class="word-heading"><div><p id="tenseLabel" class="eyebrow" hidden></p><h2 class="word" id="word"></h2></div><div class="word-progress"><span id="roundLabel">Deine Runde</span><strong id="progressText"></strong><progress id="progress" value="0" max="70" aria-label="Fortschritt"></progress></div></div>
 <button type="button" id="listenEnglish" class="listen-button">🔊 Englisch anhören</button><p id="speechStatus" class="helper" role="status" aria-live="polite" hidden></p>
 <form id="answerForm"><label for="answer" id="answerLabel">Deine Antwort auf Englisch</label><div class="answer-layout" id="answerLayout"><input id="answer" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done" aria-describedby="feedback"><div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div></div><div class="actions"><button class="primary" id="check" type="submit">Antwort prüfen</button><button id="skip" type="button" class="secondary">Weiß ich noch nicht</button></div></form>
 </div>
@@ -32,293 +32,423 @@ body{background:linear-gradient(145deg,#e6f3ff 0%,#f0e8ff 48%,#fff0da 100%);min-
 <div class="actions"><button type="button" id="startOver" class="secondary">↻ Von vorne anfangen</button></div>
 <div class="rule"><b aria-hidden="true">?</b><p>Richtig: 2 Sekunden grün. Falsch: 3 Sekunden rot mit der richtigen Lösung. Danach geht es automatisch weiter. Falsche und fast richtige Wörter übst du am Ende noch einmal.</p></div>
 </section>
-<section id="admin" class="card" hidden><div class="admin-head"><h2>Wörter verwalten</h2><button id="closeAdmin">Zurück zum Quiz</button></div><p class="notice">Die 70 fest gespeicherten Wörter sind Teil dieser Webseite und bleiben bis zur nächsten Aktualisierung erhalten. Zusätzlich eingegebene Wörter werden nur in diesem Browser gespeichert.</p><form id="addForm"><label for="newWords">Neue Wörter eingeben</label><p class="helper">Eine Zeile pro Wortpaar: Deutsch = Englisch</p><textarea id="newWords" placeholder="Apfel = apple&#10;Haus = house&#10;Wasser = water" required></textarea><div class="actions"><button class="primary" type="submit">Wörter speichern</button></div></form><p id="adminStatus" class="admin-status" role="status"></p><h3 id="listHeading"></h3><div id="wordList"></div><div class="actions"><button class="danger" id="clearCustom">Alle eigenen Wörter löschen</button></div></section>
+<section id="admin" class="card" hidden><div class="admin-head"><h2>Wörter verwalten</h2><button id="closeAdmin">Zurück zum Quiz</button></div><p class="notice">Die 82 fest gespeicherten Verbformen sind Teil dieser Webseite und bleiben bis zur nächsten Aktualisierung erhalten. Zusätzlich eingegebene Wörter werden nur in diesem Browser gespeichert.</p><form id="addForm"><label for="newWords">Neue Wörter eingeben</label><p class="helper">Eine Zeile pro Wortpaar: Deutsch = Englisch</p><textarea id="newWords" placeholder="Apfel = apple&#10;Haus = house&#10;Wasser = water" required></textarea><div class="actions"><button class="primary" type="submit">Wörter speichern</button></div></form><p id="adminStatus" class="admin-status" role="status"></p><h3 id="listHeading"></h3><div id="wordList"></div><div class="actions"><button class="danger" id="clearCustom">Alle eigenen Wörter löschen</button></div></section>
 </main><footer>Die Zähler gelten für diese Übung, einschließlich der Wiederholungen.</footer></div>
 <dialog id="login"><form id="loginForm"><h2>Admin-Bereich</h2><label for="password">Passwort</label><input type="password" id="password" autocomplete="current-password" required><p id="loginError" class="error-text" role="alert"></p><div class="actions"><button class="primary" type="submit">Öffnen</button><button id="cancelLogin" type="button">Abbrechen</button></div></form></dialog>
 <script>
 const DEFAULT_WORDS = [
   {
-    "prompt": "der Urlaub, die Ferien",
-    "answer": "holiday"
+    "prompt": "sein",
+    "answer": "be",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "zuerst, als Erstes",
-    "answer": "first"
+    "prompt": "war/waren",
+    "answer": "was/were",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "sonnig",
-    "answer": "sunny"
+    "prompt": "schlagen; besiegen",
+    "answer": "beat",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "besuchen",
-    "answer": "to visit"
+    "prompt": "schlug; besiegte",
+    "answer": "beat",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "berühmt",
-    "answer": "famous"
+    "prompt": "werden",
+    "answer": "become",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die Burg, das Schloss",
-    "answer": "castle"
+    "prompt": "wurde",
+    "answer": "became",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Halbbruder",
-    "answer": "half brother"
+    "prompt": "anfangen; beginnen",
+    "answer": "begin",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "wieder, noch (ein)mal",
-    "answer": "again"
+    "prompt": "fing an; begann",
+    "answer": "began",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "zurück",
-    "answer": "back"
+    "prompt": "beißen",
+    "answer": "bite",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "das Wetter",
-    "answer": "weather"
+    "prompt": "biss",
+    "answer": "bit",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "Glück haben",
-    "answer": "to be lucky"
+    "prompt": "blasen; wehen",
+    "answer": "blow",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "Spanien",
-    "answer": "Spain"
+    "prompt": "blies; wehte",
+    "answer": "blew",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "übernachten, wohnen",
-    "answer": "to stay"
+    "prompt": "zerbrechen",
+    "answer": "break",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "der Strand",
-    "answer": "beach"
+    "prompt": "zerbrach",
+    "answer": "broke",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "Deutsch; deutsch",
-    "answer": "German"
+    "prompt": "mitbringen",
+    "answer": "bring",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "kalt",
-    "answer": "cold"
+    "prompt": "brachte mit",
+    "answer": "brought",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "regnerisch",
-    "answer": "rainy"
+    "prompt": "bauen",
+    "answer": "build",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "Wie geht es dir/Ihnen/euch?",
-    "answer": "How are you?"
+    "prompt": "baute",
+    "answer": "built",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "Es geht mir gut.",
-    "answer": "I'm fine."
+    "prompt": "kaufen",
+    "answer": "buy",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "schön",
-    "answer": "beautiful"
+    "prompt": "kaufte",
+    "answer": "bought",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Turm",
-    "answer": "tower"
+    "prompt": "fangen",
+    "answer": "catch",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "der Weg",
-    "answer": "way"
+    "prompt": "fing",
+    "answer": "caught",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "das obere Ende, die Spitze",
-    "answer": "top"
+    "prompt": "auswählen",
+    "answer": "choose",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die Sicht; der (Aus)blick, die Aussicht",
-    "answer": "view"
+    "prompt": "wählte aus",
+    "answer": "chose",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Küste",
-    "answer": "coast"
+    "prompt": "kommen",
+    "answer": "come",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "aussehen",
-    "answer": "to look"
+    "prompt": "kam",
+    "answer": "came",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "windig",
-    "answer": "windy"
+    "prompt": "schneiden",
+    "answer": "cut",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "bewölkt, bedeckt",
-    "answer": "cloudy"
+    "prompt": "schnitt",
+    "answer": "cut",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "Gern geschehen, Bitte.",
-    "answer": "You're welcome."
+    "prompt": "machen; tun",
+    "answer": "do",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "sie, ihnen",
-    "answer": "them"
+    "prompt": "machte; tat",
+    "answer": "did",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "gestern",
-    "answer": "yesterday"
+    "prompt": "zeichnen",
+    "answer": "draw",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "Zeit haben",
-    "answer": "to be free"
+    "prompt": "zeichnete",
+    "answer": "drew",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Kühlschrank",
-    "answer": "fridge"
+    "prompt": "trinken",
+    "answer": "drink",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "der Campingplatz, der Zeltplatz",
-    "answer": "campsite"
+    "prompt": "trank",
+    "answer": "drank",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Delfin",
-    "answer": "dolphin"
+    "prompt": "fahren",
+    "answer": "drive",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "(eine Woche) lang",
-    "answer": "for (one week)"
+    "prompt": "fuhr",
+    "answer": "drove",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Woche",
-    "answer": "week"
+    "prompt": "essen",
+    "answer": "eat",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "das Lagerfeuer",
-    "answer": "campfire"
+    "prompt": "aß",
+    "answer": "ate",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Postkarte",
-    "answer": "postcard"
+    "prompt": "fallen",
+    "answer": "fall",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "gehen, laufen",
-    "answer": "to walk"
+    "prompt": "fiel",
+    "answer": "fell",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Stunde",
-    "answer": "hour"
+    "prompt": "füttern; zu essen geben",
+    "answer": "feed",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die Wolke",
-    "answer": "cloud"
+    "prompt": "fütterte; gab zu essen",
+    "answer": "fed",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Himmel",
-    "answer": "sky"
+    "prompt": "sich fühlen",
+    "answer": "feel",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "bis bald",
-    "answer": "bye for now"
+    "prompt": "fühlte sich",
+    "answer": "felt",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Sommer",
-    "answer": "summer"
+    "prompt": "kämpfen; streiten",
+    "answer": "fight",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die Eiscreme",
-    "answer": "ice cream"
+    "prompt": "kämpfte; stritt",
+    "answer": "fought",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "im Freien, draußen",
-    "answer": "outside"
+    "prompt": "finden",
+    "answer": "find",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die Fahrt, die Tour",
-    "answer": "ride"
+    "prompt": "fand",
+    "answer": "found",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "das Tagebuch",
-    "answer": "diary"
+    "prompt": "passen",
+    "answer": "fit",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "gelangweilt",
-    "answer": "bored"
+    "prompt": "passte",
+    "answer": "fit/fitted",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "bei jdm übernachten, wohnen",
-    "answer": "to stay with sb"
+    "prompt": "fliegen",
+    "answer": "fly",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "spazieren gehen",
-    "answer": "to go for a walk"
+    "prompt": "flog",
+    "answer": "flew",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Nacht",
-    "answer": "night"
+    "prompt": "vergessen",
+    "answer": "forget",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "regnen",
-    "answer": "to rain"
+    "prompt": "vergaß",
+    "answer": "forgot",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "drinnen; innen; (in ...) hinein",
-    "answer": "inside"
+    "prompt": "erhalten; bekommen; gelangen; werden",
+    "answer": "get",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "schon",
-    "answer": "already"
+    "prompt": "erhielt; bekam; gelangte; wurde",
+    "answer": "got",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "traurig",
-    "answer": "sad"
+    "prompt": "geben",
+    "answer": "give",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "einsam",
-    "answer": "lonely"
+    "prompt": "gab",
+    "answer": "gave",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "mieten, (aus)leihen",
-    "answer": "to hire"
+    "prompt": "gehen; fahren",
+    "answer": "go",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "uns",
-    "answer": "us"
+    "prompt": "ging; fuhr",
+    "answer": "went",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Soße",
-    "answer": "sauce"
+    "prompt": "aufhängen",
+    "answer": "hang",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "wunderbar, wundervoll",
-    "answer": "wonderful"
+    "prompt": "hing auf",
+    "answer": "hung",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "das Ende",
-    "answer": "end"
+    "prompt": "haben",
+    "answer": "have",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "die (Uhr)zeit",
-    "answer": "time"
+    "prompt": "hatte",
+    "answer": "had",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "gelangen",
-    "answer": "to get"
+    "prompt": "hören",
+    "answer": "hear",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "mit (dem Bus)",
-    "answer": "by (bus)"
+    "prompt": "hörte",
+    "answer": "heard",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "der Zug, die Eisenbahn",
-    "answer": "train"
+    "prompt": "schlagen; treffen",
+    "answer": "hit",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "das Flugzeug",
-    "answer": "plane"
+    "prompt": "schlug; traf",
+    "answer": "hit",
+    "tense": "Simple Past"
   },
   {
-    "prompt": "die Wohnung",
-    "answer": "apartment"
+    "prompt": "festhalten",
+    "answer": "hold",
+    "tense": "Infinitiv"
   },
   {
-    "prompt": "Wie ist ...?",
-    "answer": "What's ... like?"
+    "prompt": "hielt fest",
+    "answer": "held",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "behalten; aufbewahren",
+    "answer": "keep",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "behielt; bewahrte auf",
+    "answer": "kept",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "wissen; kennen",
+    "answer": "know",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "wusste; kannte",
+    "answer": "knew",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "sich lehnen",
+    "answer": "lean",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "lehnte sich",
+    "answer": "leant/leaned",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "lernen; erfahren",
+    "answer": "learn",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "lernte; erfuhr",
+    "answer": "learnt/learned",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "verlassen; lassen; gehen",
+    "answer": "leave",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "verließ; ließ; ging",
+    "answer": "left",
+    "tense": "Simple Past"
+  },
+  {
+    "prompt": "lassen",
+    "answer": "let",
+    "tense": "Infinitiv"
+  },
+  {
+    "prompt": "ließ",
+    "answer": "let",
+    "tense": "Simple Past"
   }
 ];
-const STORAGE_KEY_CUSTOM='custom_words_v2';
+const STORAGE_KEY_CUSTOM='custom_verbs_v1';
 
 const ADMIN_PASSWORD_HASH='e778a1f8e13abbc4c4ab045b2f0f51cf4b8eb4aa01b756a9add08a13b6e69007';
 async function validAdminPassword(value){const bytes=new TextEncoder().encode(value);const digest=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')===ADMIN_PASSWORD_HASH;}
@@ -335,7 +465,7 @@ function variants(text){
 function answerKey(text){return normalize(text).replace(/[’‘]/g,"'").replace(/[…]/g,'...').trim()}
 function acceptableAnswers(){
  const text=current().solution;
- const parts=direction==='en-de'?text.split(/[,;]/):[text];
+ const parts=[text,...(direction==='en-de'?text.split(/[,;\/]/):text.split('/'))];
  let forms=parts.flatMap(variants);
  if(direction==='en-de')forms=forms.flatMap(s=>s.includes('dir/Ihnen/euch')?['dir','Ihnen','euch'].map(p=>s.replace('dir/Ihnen/euch',p)):[s]);
  if(direction==='en-de')forms=forms.flatMap(s=>[s,s.trim().replace(/^(der|die|das)\s+/i,'')]);
@@ -359,7 +489,7 @@ function shuffle(words){let a=[...words];for(let i=a.length-1;i>0;i--){const j=M
 function current(){const w=pool[position];return direction==='de-en'?{question:w.prompt,solution:w.answer}:{question:w.answer,solution:w.prompt}}
 function feedback(text,type){$('feedback').textContent=text;$('feedback').className='feedback '+type;$('feedback').hidden=false}
 function stats(){ $('roundLabel').textContent=round===1?'Deine Runde':'Wiederholung '+(round-1);$('progressText').textContent='Aufgabe '+Math.min(position+1,pool.length)+' / '+pool.length;$('correctCount').textContent=correctCount;$('wrongCount').textContent=wrongCount;$('nearCount').textContent=nearCount;$('progress').max=pool.length;$('progress').value=position; }
-function showQuestion(){clearAdvance();stopEnglishAudio();$('questionCard').classList.remove('answer-right','answer-wrong');$('answerLayout').classList.remove('has-result');phase='answer';attempt=0;$('questionCard').hidden=false;$('roundCard').hidden=true;$('finishCard').hidden=true;$('feedback').hidden=true;$('answerForm').hidden=false;$('answer').disabled=false;$('check').disabled=false;$('skip').disabled=false;$('openAdmin').disabled=false;$('answer').value='';$('answer').removeAttribute('aria-invalid');$('word').textContent=current().question;$('instruction').textContent=direction==='de-en'?'Wie heißt das auf Englisch?':'Wie heißt das auf Deutsch?';$('answerLabel').textContent=direction==='de-en'?'Deine Antwort auf Englisch':'Deine Antwort auf Deutsch';$('answer').lang=direction==='de-en'?'en':'de';stats()}
+function showQuestion(){clearAdvance();stopEnglishAudio();$('questionCard').classList.remove('answer-right','answer-wrong');$('answerLayout').classList.remove('has-result');phase='answer';attempt=0;$('questionCard').hidden=false;$('roundCard').hidden=true;$('finishCard').hidden=true;$('feedback').hidden=true;$('answerForm').hidden=false;$('answer').disabled=false;$('check').disabled=false;$('skip').disabled=false;$('openAdmin').disabled=false;$('answer').value='';$('answer').removeAttribute('aria-invalid');$('word').textContent=current().question;const tense=pool[position].tense;$('tenseLabel').textContent=tense==='Infinitiv'?'Grundform · Infinitiv':tense==='Simple Past'?'Vergangenheit · Simple Past':'';$('tenseLabel').hidden=!tense;$('instruction').textContent=direction==='de-en'?'Wie heißt das auf Englisch?':'Wie heißt das auf Deutsch?';$('answerLabel').textContent=direction==='de-en'?'Deine Antwort auf Englisch':'Deine Antwort auf Deutsch';$('answer').lang=direction==='de-en'?'en':'de';stats()}
 function start(){clearAdvance();correctCount=0;wrongCount=0;nearCount=0;pool=shuffle(allWords());wrong=[];position=0;round=1;firstCorrect=0;total=pool.length;showQuestion()}
 function markWrong(){const w=pool[position];if(!wrong.includes(w))wrong.push(w)}
 function resolve(delay,isRight){phase='resolved';$('answer').disabled=true;$('check').disabled=true;$('skip').disabled=true;$('openAdmin').disabled=true;$('answerLayout').classList.add('has-result');clearAdvance();advanceTimer=setTimeout(()=>{advanceTimer=null;next()},delay)}
@@ -382,7 +512,7 @@ $('retry').onclick=()=>{pool=shuffle(wrong);wrong=[];position=0;round++;showQues
 function setDirection(value){if(direction===value)return;if((position>0||attempt>0||phase!=='answer')&&!confirm('Richtung wechseln und eine neue Runde starten?'))return;direction=value;$('deEn').setAttribute('aria-pressed',value==='de-en');$('enDe').setAttribute('aria-pressed',value==='en-de');start()}
 $('deEn').onclick=()=>setDirection('de-en');$('enDe').onclick=()=>setDirection('en-de');
 function save(words){try{localStorage.setItem(STORAGE_KEY_CUSTOM,JSON.stringify(words));custom=words;storageProblem=false;return true}catch{$('adminStatus').textContent='Speichern hat nicht geklappt. Prüfe, ob der Browser das Speichern von Websitedaten erlaubt.';return false}}
-function renderList(){const all=allWords();$('listHeading').textContent=all.length+' Wörter · '+custom.length+' eigene';$('wordList').replaceChildren();all.forEach((w,i)=>{const row=document.createElement('div');row.className='word-row';const pair=document.createElement('div');pair.className='pair';const de=document.createElement('b'),en=document.createElement('span');de.textContent=w.prompt;en.textContent=w.answer;pair.append(de,en);row.append(pair);if(i<DEFAULT_WORDS.length){const badge=document.createElement('small');badge.textContent='Fest gespeichert';row.append(badge)}else{const button=document.createElement('button');button.textContent='Löschen';button.className='danger';button.setAttribute('aria-label',w.prompt+' löschen');button.onclick=()=>{if(!isAdmin||!confirm('„'+w.prompt+'“ löschen?'))return;if(save(custom.filter((_,j)=>j!==i-DEFAULT_WORDS.length))){$('adminStatus').textContent='Wort gelöscht. Änderungen gelten ab der nächsten Runde.';renderList()}};row.append(button)}$('wordList').append(row)});$('clearCustom').disabled=!custom.length}
+function renderList(){const all=allWords();$('listHeading').textContent=all.length+' Wörter · '+custom.length+' eigene';$('wordList').replaceChildren();all.forEach((w,i)=>{const row=document.createElement('div');row.className='word-row';const pair=document.createElement('div');pair.className='pair';const de=document.createElement('b'),en=document.createElement('span');de.textContent=w.prompt;en.textContent=w.answer+(w.tense?' · '+w.tense:'');pair.append(de,en);row.append(pair);if(i<DEFAULT_WORDS.length){const badge=document.createElement('small');badge.textContent='Fest gespeichert';row.append(badge)}else{const button=document.createElement('button');button.textContent='Löschen';button.className='danger';button.setAttribute('aria-label',w.prompt+' löschen');button.onclick=()=>{if(!isAdmin||!confirm('„'+w.prompt+'“ löschen?'))return;if(save(custom.filter((_,j)=>j!==i-DEFAULT_WORDS.length))){$('adminStatus').textContent='Wort gelöscht. Änderungen gelten ab der nächsten Runde.';renderList()}};row.append(button)}$('wordList').append(row)});$('clearCustom').disabled=!custom.length}
 $('openAdmin').onclick=()=>{if(isAdmin||phase==='resolved')return;stopEnglishAudio();$('password').value='';$('loginError').textContent='';$('login').showModal()};$('cancelLogin').onclick=()=>$('login').close();
 $('loginForm').onsubmit=async e=>{e.preventDefault();let valid=false;try{valid=await validAdminPassword($('password').value)}catch{$('loginError').textContent='Bitte öffne das Quiz über den HTTPS-Webseiten-Link.';return}if(!valid){$('loginError').textContent='Das Passwort stimmt nicht.';return}isAdmin=true;$('login').close();$('learn').hidden=true;$('admin').hidden=false;$('adminStatus').textContent=storageProblem?'Gespeicherte Wörter konnten nicht geladen werden. Prüfe die Browsereinstellungen.':'';renderList();$('newWords').focus()};
 $('closeAdmin').onclick=()=>{isAdmin=false;$('admin').hidden=true;$('learn').hidden=false;$('openAdmin').focus()};
@@ -398,7 +528,7 @@ function stopEnglishAudio(){
  $('speechStatus').hidden=true;
 }
 function englishSpokenText(text){
- return text.replace(/\(([^()]*)\)/g,'$1').replace(/\bsb\b/g,'somebody').replace(/\.\.\./g,'something');
+ return text.replace(/\//g,', ').replace(/\(([^()]*)\)/g,'$1').replace(/\bsb\b/g,'somebody').replace(/\.\.\./g,'something');
 }
 function listenEnglish(){
  if(!speechAvailable||!pool[position])return;
